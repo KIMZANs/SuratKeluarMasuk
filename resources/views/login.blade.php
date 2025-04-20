@@ -85,6 +85,13 @@
                         <i class="fas fa-user-circle"></i> Form Login
                     </div>
                     <div class="card-body">
+                        <!-- Modal Success -->
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
                         <!-- Modal Error -->
                         @if (session('error'))
                             <div class="alert alert-danger text-center" role="alert">

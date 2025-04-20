@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Jabatan;
+use App\Models\GolonganJabatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -92,5 +93,11 @@ class AdminDashboardController extends Controller
         ]);
 
         return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil ditambahkan.');
+    }
+
+    public function indexGolonganJabatan()
+    {
+        $golonganJabatan = GolonganJabatan::all(); // Ambil semua data golongan jabatan
+        return view('Admin.goljabatan', compact('golonganJabatan'));
     }
 }

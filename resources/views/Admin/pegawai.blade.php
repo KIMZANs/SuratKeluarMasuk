@@ -170,11 +170,9 @@
                                                         </button>
                                                     </td>
                                                     <td>
-                                                        <form action="{{ route('akun.destroy', $user->id) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapusPegawaiModal" onclick="setHapusPegawaiForm('{{ route('akun.destroy', $user->id) }}')">
+                                                            Hapus
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -215,13 +213,19 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select name="role" id="role" class="form-select" required>
+                                <option value="" disabled selected>Pilih Role</option>
                                 <option value="reviewer">Reviewer</option>
                                 <option value="penandatangan">Penandatangan</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" required>
+                            <div class="input-group">
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" required>
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success">Simpan</button>
                     </form>
@@ -270,6 +274,29 @@
         </div>
     </div>
 
+    <!-- Modal Hapus Pegawai -->
+    <div class="modal fade" id="hapusPegawaiModal" tabindex="-1" aria-labelledby="hapusPegawaiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hapusPegawaiModalLabel">Hapus Pegawai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus pegawai ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form id="hapusPegawaiForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (session('success'))
         <script>
             var successModal = new bootstrap.Modal(document.getElementById('successModal'));
@@ -282,6 +309,26 @@
             const confirmForm = document.getElementById('confirmForm');
             confirmForm.action = actionUrl;
         }
+
+        function setHapusPegawaiForm(actionUrl) {
+            const hapusPegawaiForm = document.getElementById('hapusPegawaiForm');
+            hapusPegawaiForm.action = actionUrl;
+        }
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
     </script>
 
     <!-- Bootstrap JS -->

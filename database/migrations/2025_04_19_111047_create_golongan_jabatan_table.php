@@ -14,9 +14,17 @@ return new class extends Migration
         Schema::create('golongan_jabatan', function (Blueprint $table) {
             $table->id();
             $table->string('nama_jabatan'); // Nama jabatan
-            $table->text('keterangan')->nullable(); // Deskripsi jabatan
+            $table->string('nama_golongan'); // Golongan jabatan
             $table->timestamps();
         });
+
+        // Menambahkan data jabatan awal
+        DB::table('golongan_jabatan')->insert([
+            'nama_jabatan' => 'Manager',  
+            'nama_golongan' => 'Golongan A',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     /**

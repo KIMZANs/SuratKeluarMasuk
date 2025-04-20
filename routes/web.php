@@ -7,8 +7,12 @@ use App\Http\Controllers\PenandatanganDashboardController;
 use App\Http\Controllers\ReviewerDashboardController;
 use App\Http\Controllers\UserController; // Pastikan UserController diimpor
 
-// Route untuk menampilkan halaman login
 Route::get('/', function () {
+    return view('login'); // Pastikan file layout.blade.php ada di resources/views
+})->name('login');
+
+// Route untuk menampilkan halaman login
+Route::get('/login', function () {
     return view('login'); // Pastikan file login.blade.php ada di resources/views
 })->name('login');
 
@@ -37,9 +41,7 @@ Route::post('/admin/pegawai/{id}/toggle-status', [AdminDashboardController::clas
 
 Route::post('/admin/pegawai/store', [AdminDashboardController::class, 'storePegawai'])->name('admin.pegawai.store');
 
-Route::get('/admin/goljabatan', function () {
-    return view('Admin.goljabatan');
-})->name('admin.goljabatan');
+Route::get('/admin/goljabatan', [AdminDashboardController::class, 'indexGolonganJabatan'])->name('admin.goljabatan');
 
 // Route untuk mengedit akun
 Route::get('/akun/{name}/edit', [UserController::class, 'edit'])->name('akun.edit'); // Route untuk halaman edit akun

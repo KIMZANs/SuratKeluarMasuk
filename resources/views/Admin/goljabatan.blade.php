@@ -127,24 +127,21 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Golongan I</td>
-                                                <td>Deskripsi golongan I</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-info">Edit</button>
-                                                    <button class="btn btn-sm btn-danger">Hapus</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Golongan II</td>
-                                                <td>Deskripsi golongan II</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-info">Edit</button>
-                                                    <button class="btn btn-sm btn-danger">Hapus</button>
-                                                </td>
-                                            </tr>
+                                            @forelse ($golonganJabatan as $index => $golongan)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $golongan->nama_jabatan }}</td>
+                                                    <td>{{ $golongan->nama_golongan }}</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-info">Edit</button>
+                                                        <button class="btn btn-sm btn-danger">Hapus</button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center">Tidak ada data golongan jabatan.</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
