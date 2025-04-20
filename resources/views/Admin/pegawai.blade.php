@@ -98,11 +98,6 @@
                         <hr class="text-white">
                         
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="bi bi-person-fill-add"></i> Tambah Pegawai
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('akun.edit', Auth::user()->id) }}">
                                 <i class="bi bi-gear"></i> Setting
                             </a>
@@ -128,8 +123,13 @@
                         <div class="col-md-6">
                             <form action="{{ route('admin.pegawai') }}" method="GET" class="d-flex">
                                 <input type="text" name="search" class="form-control me-2" placeholder="Cari nama atau NIP..." value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary">Cari</button>
+                                <button type="submit" class="btn btn-primary me-2">Cari</button>
                             </form>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahPegawaiModal">
+                                Tambah Pegawai
+                            </button>
                         </div>
                     </div>
                     <div class="row">
@@ -186,6 +186,47 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Pegawai -->
+    <div class="modal fade" id="tambahPegawaiModal" tabindex="-1" aria-labelledby="tambahPegawaiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="tambahPegawaiModalLabel">Tambah Pegawai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.pegawai.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nama Pegawai</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Masukkan nama pegawai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nip" class="form-label">NIP</label>
+                            <input type="text" name="nip" id="nip" class="form-control" placeholder="Masukkan NIP pegawai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email pegawai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select name="role" id="role" class="form-select" required>
+                                <option value="reviewer">Reviewer</option>
+                                <option value="penandatangan">Penandatangan</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

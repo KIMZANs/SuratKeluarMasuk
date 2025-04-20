@@ -98,11 +98,6 @@
                         <hr class="text-white">
                         
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="bi bi-person-fill-add"></i> Tambah Pegawai
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('akun.edit', Auth::user()->id) }}">
                                 <i class="bi bi-gear"></i> Setting
                             </a>
@@ -119,8 +114,13 @@
                         <div class="col-md-6">
                             <form action="{{ route('admin.jabatan') }}" method="GET" class="d-flex">
                                 <input type="text" name="search" class="form-control me-2" placeholder="Cari nama jabatan..." value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary">Cari</button>
+                                <button type="submit" class="btn btn-primary me-2">Cari</button>
                             </form>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahJabatanModal">
+                                Tambah Jabatan
+                            </button>
                         </div>
                     </div>
                     <div class="row">
@@ -158,31 +158,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <div class="card shadow-sm">
-                                <div class="card-header bg-success text-white">
-                                    Tambah Jabatan
-                                </div>
-                                <div class="card-body">
-                                    <form action="{{ route('admin.jabatan.store') }}" method="POST">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="nama_jabatan" class="form-label">Nama Jabatan</label>
-                                            <input type="text" name="nama_jabatan" id="nama_jabatan" class="form-control" placeholder="Masukkan nama jabatan" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="keterangan" class="form-label">Keterangan</label>
-                                            <textarea name="keterangan" id="keterangan" class="form-control" placeholder="Masukkan keterangan (opsional)"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-success">Simpan</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Jabatan -->
+    <div class="modal fade" id="tambahJabatanModal" tabindex="-1" aria-labelledby="tambahJabatanModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="tambahJabatanModalLabel">Tambah Jabatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.jabatan.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="nama_jabatan" class="form-label">Nama Jabatan</label>
+                            <input type="text" name="nama_jabatan" id="nama_jabatan" class="form-control" placeholder="Masukkan nama jabatan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keterangan" class="form-label">Keterangan</label>
+                            <textarea name="keterangan" id="keterangan" class="form-control" placeholder="Masukkan keterangan (opsional)"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

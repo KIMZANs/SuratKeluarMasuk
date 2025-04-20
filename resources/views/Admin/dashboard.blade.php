@@ -96,12 +96,7 @@
                         
                         <!-- Garis Pembatas -->
                         <hr class="text-white">
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="bi bi-person-fill-add"></i> Tambah Pegawai                            
-                            </a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('akun.edit', Auth::user()->id) }}">
                                 <i class="bi bi-gear"></i> Setting

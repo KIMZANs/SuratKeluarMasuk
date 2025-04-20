@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Jabatan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminDashboardController extends Controller
 {
@@ -42,6 +43,28 @@ class AdminDashboardController extends Controller
 
         // Redirect kembali ke halaman daftar pegawai dengan pesan sukses
         return redirect()->route('admin.pegawai')->with('success', 'Status pengguna berhasil diubah.');
+    }
+
+    public function storePegawai(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nip' => 'required|string|max:20|unique:users,nip',
+            'email' => 'required|email|unique:users,email',
+            'role' => 'required|in:reviewer,penandatangan',
+            'password' => 'required|string|min:8',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'nip' => $request->nip,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => Hash::make($request->password),
+            'status' => 'inactive', // Default status
+        ]);
+
+        return redirect()->route('admin.pegawai')->with('success', 'Pegawai berhasil ditambahkan.');
     }
 
     public function indexJabatan(Request $request)
