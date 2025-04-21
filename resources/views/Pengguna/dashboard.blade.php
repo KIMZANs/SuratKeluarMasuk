@@ -68,34 +68,28 @@
             <!-- Sidebar -->
             <nav class="col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="position-sticky pt-3">
-                    <h4 class="text-center py-3">Admin Panel</h4>
+                    <h4 class="text-center py-3">Pengguna Panel</h4>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                            <a class="nav-link {{ request()->is('pengguna/dashboard') ? 'active' : '' }}" href="{{ route('pengguna.dashboard') }}">
                                 <i class="bi bi-house-door"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.pegawai') }}">
-                                <i class="bi bi-people"></i> Daftar Pegawai
+                            <a class="nav-link" href="{{ route('pengguna.surat_masuk') }}">
+                                <i class="bi bi-envelope-arrow-down"></i> Surat Masuk
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.jabatan') }}">
-                                <i class="bi bi-briefcase"></i> Daftar Jabatan
+                            <a class="nav-link" href="{{ route('pengguna.surat_keluar') }}">
+                                <i class="bi bi-envelope-arrow-up"></i> Surat Keluar
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.goljabatan') }}">
-                                <i class="bi bi-list-task"></i> Golongan Jabatan
-                            </a>
-                        </li>
-                        
+
                         <!-- Garis Pembatas -->
                         <hr class="text-white">
-                        
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('akun.edit', Auth::user()->id) }}">
+                            <a class="nav-link" href="{{ route('pengguna.pengaturan') }}">
                                 <i class="bi bi-gear"></i> Setting
                             </a>
                         </li>

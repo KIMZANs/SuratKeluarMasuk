@@ -52,7 +52,7 @@ class AdminDashboardController extends Controller
             'name' => 'required|string|max:255',
             'nip' => 'required|string|max:20|unique:users,nip',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:reviewer,penandatangan',
+            'role' => 'required|in:pengguna,reviewer,penandatangan',
             'password' => 'required|string|min:8',
         ]);
 
@@ -99,5 +99,20 @@ class AdminDashboardController extends Controller
     {
         $golonganJabatan = GolonganJabatan::all(); // Ambil semua data golongan jabatan
         return view('Admin.goljabatan', compact('golonganJabatan'));
+    }
+
+    public function storeGolonganJabatan(Request $request)
+    {
+        $request->validate([
+            'nama_jabatan' => 'required|string|max:255',
+            'nama_golongan' => 'required|string|max:255',
+        ]);
+
+        GolonganJabatan::create([
+            'nama_jabatan' => $request->nama_jabatan,
+            'nama_golongan' => $request->nama_golongan,
+        ]);
+
+        return redirect()->route('admin.goljabatan')->with('success', 'Golongan Jabatan berhasil ditambahkan.');
     }
 }

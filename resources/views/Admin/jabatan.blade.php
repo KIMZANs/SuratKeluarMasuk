@@ -46,9 +46,6 @@
         .navbar .navbar-brand {
             color: white;
         }
-        .navbar .navbar-brand:hover {
-            color: #007bff;
-        }
     </style>
 </head>
 <body>

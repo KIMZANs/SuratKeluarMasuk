@@ -45,9 +45,6 @@
         .navbar .navbar-brand {
             color: white;
         }
-        .navbar .navbar-brand:hover {
-            color: #007bff;
-        }
     </style>
 </head>
 <body>
@@ -109,6 +106,27 @@
             <main class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="container mt-5">
                     <h1 class="text-center mb-4">Golongan Jabatan</h1>
+                    
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <form action="{{ route('admin.goljabatan') }}" method="GET" class="d-flex">
+                                <input type="text" name="search" class="form-control me-2" placeholder="Cari nama golongan..." value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary me-2">Cari</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahGolonganModal">
+                                Tambah Golongan Jabatan
+                            </button>
+                        </div>
+                    </div>
                     <div class="row">
                         <!-- Daftar Golongan Jabatan -->
                         <div class="col-md-12">
@@ -150,6 +168,32 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Golongan Jabatan -->
+    <div class="modal fade" id="tambahGolonganModal" tabindex="-1" aria-labelledby="tambahGolonganModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="tambahGolonganModalLabel">Tambah Golongan Jabatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.goljabatan.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="nama_golongan" class="form-label">Nama Golongan</label>
+                            <input type="text" name="nama_golongan" id="nama_golongan" class="form-control" placeholder="Masukkan nama golongan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea name="deskripsi" id="deskripsi" class="form-control" placeholder="Masukkan deskripsi (opsional)"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

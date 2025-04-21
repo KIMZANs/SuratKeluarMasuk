@@ -46,9 +46,6 @@
         .navbar .navbar-brand {
             color: white;
         }
-        .navbar .navbar-brand:hover {
-            color: #007bff;
-        }
     </style>
 </head>
 <body>
@@ -214,6 +211,7 @@
                             <label for="role" class="form-label">Role</label>
                             <select name="role" id="role" class="form-select" required>
                                 <option value="" disabled selected>Pilih Role</option>
+                                <option value="pengguna">Pengguna</option>
                                 <option value="reviewer">Reviewer</option>
                                 <option value="penandatangan">Penandatangan</option>
                             </select>

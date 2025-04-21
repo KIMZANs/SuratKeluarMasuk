@@ -19,7 +19,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         // Kirim data pengguna ke view 'akun'
-        return view('admin.akun', compact('user'));
+        return view('admin.pengaturan', compact('user'));
     }
 
     /**

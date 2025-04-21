@@ -48,9 +48,6 @@
         .navbar .navbar-brand {
             color: white;
         }
-        .navbar .navbar-brand:hover {
-            color: #007bff;
-        }
         .readonly-input {
             background-color: #e9ecef;
             color: #6c757d;

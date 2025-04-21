@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nip')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('role', ['admin', 'penandatangan', 'reviewer']);
+            $table->enum('role', ['admin', 'pengguna', 'penandatangan', 'reviewer']);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

@@ -26,13 +26,10 @@ class LoginController extends Controller
             }
 
             // Periksa role pengguna dan arahkan ke dashboard yang sesuai
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->role === 'penandatangan') {
-                return redirect()->route('penandatangan.dashboard');
-            } elseif ($user->role === 'reviewer') {
-                return redirect()->route('reviewer.dashboard');
-            }
+            if ($user->role === 'admin') {return redirect()->route('admin.dashboard');}
+            elseif ($user->role === 'pengguna') {return redirect()->route('pengguna.dashboard');}
+            elseif ($user->role === 'penandatangan') {return redirect()->route('penandatangan.dashboard');} 
+            elseif ($user->role === 'reviewer') {return redirect()->route('reviewer.dashboard');}
         }
 
         // Jika login gagal, set flash message

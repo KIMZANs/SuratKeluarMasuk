@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('surat_masuk', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('nomor_surat')->unique(); // Nomor surat
+            $table->string('pengirim'); // Pengirim surat
+            $table->string('perihal'); // Perihal surat
+            $table->date('tanggal_surat'); // Tanggal surat
+            $table->date('tanggal_diterima'); // Tanggal diterima
+            $table->text('keterangan')->nullable(); // Keterangan tambahan
+            $table->string('file_surat')->nullable(); // File surat (jika ada)
+            $table->timestamps(); // Kolom created_at dan updated_at
         });
     }
 
