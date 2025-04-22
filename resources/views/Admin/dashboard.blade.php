@@ -87,13 +87,13 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.jabatan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="nav-icon fa-regular fa-circle"></i>
                                         <p>Jabatan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('admin.goljabatan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="nav-icon fa-regular fa-circle"></i>
                                         <p>Jabatan Golongan</p>
                                     </a>
                                 </li>
@@ -138,6 +138,22 @@
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
+
+                    <!-- Modal Success -->
+                    @if (session('success'))
+                    <div class="card card-success shadow-none">
+                        <div class="card-header">
+                            <h3 class="card-title m-2">{{ session('success') }}</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool m-0" data-card-widget="remove"><i
+                                        class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    <!-- /.modal-success -->
+
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1 class="m-0">Dashboard Admin</h1>

@@ -1,164 +1,257 @@
 <!-- filepath: c:\xampp\htdocs\Surat\resources\views\Admin\jabatan.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Jabatan</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #343a40;
-            color: white;
-        }
-        .sidebar .nav-link {
-            color: white;
-            transition: background-color 0.3s;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #495057;
-        }
-        .sidebar .nav-link.active {
-            background-color: #007bff;
-            color: white;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .card-header {
-            font-weight: bold;
-        }
-        .navbar {
-            background-color: #343a40;
-            color: white;
-        }
-        .navbar .navbar-brand {
-            color: white;
-        }
-    </style>
+    <!-- AdminLTE Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- AdminLTE CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" rel="stylesheet">
+    <!-- AdminLTE Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container-fluid">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid">
-                <div class="ms-auto d-flex align-items-center">
-                    <!-- Menampilkan nama pengguna -->
-                    <span class="navbar-text me-3">Selamat Datang, {{ Auth::user()->name }}</span>
-                    <!-- Logout Button -->
-                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </nav>>
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                <div class="position-sticky pt-3">
-                    <h4 class="text-center py-3">Admin Panel</h4>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                                <i class="bi bi-house-door"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.pegawai') }}">
-                                <i class="bi bi-people"></i> Daftar Pegawai
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('admin/jabatan') ? 'active' : '' }}" href="{{ route('admin.jabatan') }}">
-                                <i class="bi bi-briefcase"></i> Daftar Jabatan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.goljabatan') }}">
-                                <i class="bi bi-list-task"></i> Golongan Jabatan
-                            </a>
-                        </li>
 
-                        <!-- Garis Pembatas -->
-                        <hr class="text-white">
-                        
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link">Home</a>
+                </li>
+            </ul>
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="nav-link active">
+                        Welcome, {{ Auth::user()->name }}
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a class="brand-link">
+                <img src="{{ asset('storage/assets/Logo_IPDN.png') }}" alt="Logo IPDN" class="brand-image img-circle"
+                    width="150" height="150">
+                <span class="brand-text font-weight-light">Arsip Surat</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('akun.edit', Auth::user()->id) }}">
-                                <i class="bi bi-gear"></i> Setting
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-house"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.pegawai') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-user"></i>
+                                <p>Daftar Pegawai</p>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fa-solid fa-user-plus"></i>
+                                <p>
+                                    Daftar jabatan
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.jabatan') }}" class="nav-link">
+                                        <i class="fa-regular fa-circle-dot"></i>
+                                        <p>Jabatan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.goljabatan') }}" class="nav-link">
+                                        <i class="fa-regular fa-circle"></i>
+                                        <p>Jabatan Golongan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-envelope"></i>
+                                <p>
+                                    Surat Masuk
+                                    <span class="right badge badge-danger">New</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-envelope"></i>
+                                <p>
+                                    Surat Keluar
+                                    <span class="badge badge-info right">2</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('akun.edit', Auth::user()->id) }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-gear"></i>
+                                <p>
+                                    Setting
+                                </p>
                             </a>
                         </li>
                     </ul>
-                </div>
-            </nav>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
 
-            <!-- Main Content Jabatan -->
-            <main class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="container mt-5">
-                    <h1 class="text-center mb-4">Daftar Jabatan</h1>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <form action="{{ route('admin.jabatan') }}" method="GET" class="d-flex">
-                                <input type="text" name="search" class="form-control me-2" placeholder="Cari nama jabatan..." value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary me-2">Cari</button>
-                            </form>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Jabatan</h1>
                         </div>
-                        <div class="col-md-6 text-end">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahJabatanModal">
-                                Tambah Jabatan
-                            </button>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('admin.jabatan') }}">Daftar Jabatan</a>
+                                </li>
+                                <li class="breadcrumb-item active">Jabatan</li>
+                            </ol>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Flash Message -->
+                    @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @endif
+                    <!-- Table -->
                     <div class="row">
-                        <!-- Daftar Jabatan -->
-                        <div class="col-md-12">
+                        <div class="col-12">
                             <div class="card shadow-sm">
                                 <div class="card-header bg-primary text-white">
-                                    Daftar Jabatan
+                                    <h3 class="card-title mb-0">Daftar Jabatan</h3>
+                                    <div class="card-tools d-flex align-items-center gap-2">
+                                        <div class="input-group input-group-sm" style="width: 250px; margin-right: 10px;">
+                                            <input type="text" name="table_search" class="form-control" placeholder="Cari Nama Jabatan...">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-default">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#tambahJabatanModal">
+                                            <i class="fas fa-plus"></i> Tambah
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered table-striped">
-                                        <thead>
+                                <div class="card-body table-responsive p-0" style="height: 300px;">
+                                    <table class="table table-head-fixed text-nowrap table-bordered">
+                                        <thead class="thead-light">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Jabatan</th>
-                                                <th>keterangan</th>
+                                                <th>Keterangan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($jabatans as $index => $jabatan)
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $jabatan->nama_jabatan }}</td>
-                                                    <td>{{ $jabatan->keterangan ?? '-' }}</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-info">Edit</button>
-                                                        <button class="btn btn-sm btn-danger">Hapus</button>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $jabatan->nama_jabatan }}</td>
+                                                <td>{{ $jabatan->keterangan ?? '-' }}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-info">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
+                                <!-- /.card-body -->
                             </div>
+                            <!-- /.card -->
                         </div>
                     </div>
+
                 </div>
-            </main>
+            </section>
+            <!-- /.content -->
         </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 3.2.0
+            </div>
+            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+            reserved.
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
     </div>
+    <!-- ./wrapper -->
 
     <!-- Modal Tambah Jabatan -->
     <div class="modal fade" id="tambahJabatanModal" tabindex="-1" aria-labelledby="tambahJabatanModalLabel" aria-hidden="true">
@@ -186,7 +279,18 @@
         </div>
     </div>
 
+    <!-- AdminLTE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
+
 </html>
