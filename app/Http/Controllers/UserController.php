@@ -37,23 +37,20 @@ class UserController extends Controller
         // Validasi input dari form
         $request->validate([
             'name' => 'required|string|max:255',
+            'nip' => 'required|string|max:255|unique:users,nip,' . $id, // Pastikan NIP unik kecuali untuk pengguna ini
             'email' => 'required|email|unique:users,email,' . $id, // Pastikan email unik kecuali untuk pengguna ini
             'password' => 'nullable|min:8', // Password opsional, minimal 8 karakter jika diisi
-            'role' => 'required|in:penandatangan,reviewer', // Validasi role hanya boleh salah satu dari opsi
-            'status' => 'required|in:active,inactive', // Validasi status hanya boleh active/inactive
         ]);
 
         // Update data pengguna
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->nip = $request->nip;
 
         // Jika password diisi, maka update password
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
-
-        $user->role = $request->role;
-        $user->status = $request->status;
 
         // Simpan perubahan ke database
         $user->save();
