@@ -104,7 +104,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.surat_masuk') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Masuk
@@ -113,7 +113,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.surat_keluar') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Keluar
@@ -164,7 +164,7 @@
                         <!-- left column -->
                         <div class="col-md-12">
                             <!-- general form elements -->
-                            <div class="card card-primary">
+                            <div class="card card-primary shadow-none">
                                 <!-- form start -->
                                 <form action="{{ route('akun.update', $user->id) }}" method="POST">
                                     @csrf

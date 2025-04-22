@@ -4,15 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin</title>
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <title>Surat Masuk</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- AdminLTE -->
+    <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <!-- Bootstrap (Letakkan ini sebelum AdminLTE jika tidak ingin menimpa font AdminLTE) -->
+    <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 
@@ -20,7 +19,7 @@
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar -->
+            <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -29,7 +28,7 @@
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">Home</a>
                 </li>
             </ul>
-            <!-- Right navbar -->
+            <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <span class="nav-link active">
@@ -51,7 +50,7 @@
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- IPDN Logo -->
+            <!-- Brand Logo -->
             <a class="brand-link">
                 <img src="{{ asset('storage/assets/Logo_IPDN.png') }}" alt="Logo IPDN" class="brand-image img-circle"
                     width="150" height="150">
@@ -64,8 +63,10 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="{{ route('admin.dashboard') }}" class="nav-link active">
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-house"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -87,20 +88,20 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.jabatan') }}" class="nav-link">
-                                        <i class="nav-icon fa-regular fa-circle"></i>
+                                        <i class="far fa-circle nav-icon"></i>
                                         <p>Jabatan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('admin.goljabatan') }}" class="nav-link">
-                                        <i class="nav-icon fa-regular fa-circle"></i>
+                                        <i class="far fa-circle nav-icon"></i>
                                         <p>Jabatan Golongan</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.surat_masuk') }}" class="nav-link">
+                            <a href="{{ route('admin.surat_masuk') }}" class="nav-link active">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Masuk
@@ -132,88 +133,86 @@
             <!-- /.sidebar -->
         </aside>
 
-        <!-- Content Wrapper -->
+        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-
             <!-- Content Header (Page header) -->
-            <div class="content-header">
+            <section class="content-header">
                 <div class="container-fluid">
-
-                    <!-- Modal Success -->
-                    @if (session('success'))
-                        <div class="card card-success shadow-none">
-                            <div class="card-header">
-                                <h3 class="card-title m-2">{{ session('success') }}</h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool m-0" data-card-widget="remove"><i
-                                            class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                    <!-- /.modal-success -->
-
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Dashboard Admin</h1>
+                            <h1>Surat Masuk</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Admin</li>
+                                <li class="breadcrumb-item active">Surat Masuk</li>
                             </ol>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- /.content-header -->
+                </div><!-- /.container-fluid -->
+            </section>
 
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    <!-- Dashboard Statistik -->
                     <div class="row">
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-info"><i class="far fa-solid fa-user"></i></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">User</span>
-                                    <span class="info-box-number">1,410</span>
+                        <div class="col-md-12">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-primary">Tambah</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-success"><i class="far fa-solid fa-users"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">User Aktif</span>
-                                    <span class="info-box-number">410</span>
+                            <div class="card shadow-none">
+                                <!-- /.card-header -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-head-fixed text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10px">No</th>
+                                                <th>Dari</th>
+                                                <th>Tembusan</th>
+                                                <th>Tanggal</th>
+                                                <th>Nomor</th>
+                                                <th>Sifat</th>
+                                                <th>Lampiran</th>
+                                                <th>Perihal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Dari aku</td>
+                                                <td>Kemana ya</td>
+                                                <td>2023-10-01</td>
+                                                <td>123/456</td>
+                                                <td>Rahasia</td>
+                                                <td>1</td>
+                                                <td>Perihal penting</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer clearfix">
+                                    <ul class="pagination pagination-sm m-0 float-right">
+                                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                    </ul>
                                 </div>
                             </div>
+                            <!-- /.card -->
                         </div>
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-success"><i class="far fa-solid fa-envelope"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Surat Masuk</span>
-                                    <span class="info-box-number">13,648</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-danger"><i class="far fa-solid fa-envelope"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Surat Keluar</span>
-                                    <span class="info-box-number">93,139</span>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- /.card -->
                     </div>
                 </div>
             </section>
-            <!-- /.main-content -->
+            <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
 
