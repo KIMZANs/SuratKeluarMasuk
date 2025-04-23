@@ -119,4 +119,16 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.goljabatan')->with('success', 'Golongan Jabatan berhasil ditambahkan.');
     }
+
+    public function indexsurat_masuk()
+    {
+        // Logika untuk dashboard surat masuk
+        return view('Admin.surat_masuk');
+    }
+
+    public function indexsurat_keluar()
+    {
+        // Logika untuk dashboard surat keluar
+        return view('Admin.surat_keluar');
+    }
 }
