@@ -12,8 +12,12 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        // Logika untuk dashboard admin
-        return view('Admin.dashboard');
+        // Hitung jumlah pegawai aktif dan tidak aktif
+    $pegawaiActive = \App\Models\User::where('status', 'active')->where('role', '!=', 'admin')->count();
+    $pegawaiInactive = \App\Models\User::where('status', 'inactive')->where('role', '!=', 'admin')->count();
+
+    // Kirim data ke view
+        return view('Admin.dashboard', compact('pegawaiActive', 'pegawaiInactive'));
     }
 
     public function indexPegawai(Request $request)

@@ -136,9 +136,6 @@
                                 </a>
                             </li>
 
-                            <!-- Garis Pembatas -->
-                            <hr class="text-white">
-
                             <li class="nav-item">
                                 <a href="{{ route('akun.edit', Auth::user()->id) }}" class="nav-link">
                                     <i class="nav-icon fa-solid fa-gear"></i>
@@ -184,8 +181,17 @@
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                                 {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         @endif
 
@@ -207,11 +213,9 @@
                                         <h3 class="card-title">Daftar Pegawai</h3>
                                         <!-- Kolom Search -->
                                         <div class="card-tools">
-                                            <form action="{{ route('admin.pegawai') }}" method="GET"
-                                                class="d-flex">
+                                            <form action="{{ route('admin.pegawai') }}" method="GET" class="d-flex">
                                                 <div class="input-group input-group-sm" style="width: 250px;">
-                                                    <input type="text" name="search"
-                                                        class="form-control float-right"
+                                                    <input type="text" name="search" class="form-control float-right"
                                                         placeholder="Cari nama atau NIP..."
                                                         value="{{ request('search') }}">
                                                     <button type="submit" class="btn btn-primary">
@@ -254,8 +258,7 @@
                                                         </td>
                                                         <td>
                                                             <button type="button" class="btn btn-sm btn-danger"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#hapusPegawaiModal"
+                                                                data-bs-toggle="modal" data-bs-target="#hapusPegawaiModal"
                                                                 onclick="setHapusPegawaiForm('{{ route('akun.destroy', $user->id) }}')">
                                                                 Hapus
                                                             </button>
@@ -293,33 +296,39 @@
                             <h5 class="modal-title" id="tambahPegawaiModalLabel">Tambah
                                 Pegawai
                             </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="{{ route('admin.pegawai.store') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nama
-                                        Pegawai</label>
+                                    <label for="name" class="form-label">Nama Pegawai</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="Masukkan nama pegawai" required>
+                                    @error('name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="nip" class="form-label">NIP</label>
                                     <input type="text" name="nip" id="nip" class="form-control"
                                         placeholder="Masukkan NIP pegawai" required>
+                                    @error('nip')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" name="email" id="email" class="form-control"
                                         placeholder="Masukkan email pegawai" required>
+                                    @error('email')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="role" class="form-label">Role</label>
                                     <select name="role" id="role" class="form-select" required>
-                                        <option value="" disabled selected>Pilih Role
-                                        </option>
+                                        <option value="" disabled selected>Pilih Role</option>
                                         <option value="pengguna">Pengguna</option>
                                         <option value="reviewer">Reviewer</option>
                                         <option value="penandatangan">Penandatangan</option>
@@ -349,8 +358,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="successModalLabel">Berhasil</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             {{ session('success') }}
@@ -369,8 +377,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="confirmModalLabel">Konfirmasi</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Apakah Anda yakin ingin mengubah status pengguna ini?
@@ -394,8 +401,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="hapusPegawaiModalLabel">Hapus Pegawai
                             </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Apakah Anda yakin ingin menghapus pegawai ini?
@@ -430,7 +436,7 @@
                     hapusPegawaiForm.action = actionUrl;
                 }
 
-                document.getElementById('togglePassword').addEventListener('click', function() {
+                document.getElementById('togglePassword').addEventListener('click', function () {
                     const passwordInput = document.getElementById('password');
                     const icon = this.querySelector('i');
 

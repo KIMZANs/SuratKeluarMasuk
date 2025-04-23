@@ -162,8 +162,8 @@
                             <div class="info-box">
                                 <span class="info-box-icon bg-info"><i class="far fa-solid fa-user"></i></i></span>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">User</span>
-                                    <span class="info-box-number">1,410</span>
+                                    <span class="info-box-text">Pegawai Active</span>
+                                    <span class="info-box-number">{{ $pegawaiActive }}</span>
                                 </div>
                             </div>
                         </div>
@@ -171,8 +171,8 @@
                             <div class="info-box">
                                 <span class="info-box-icon bg-success"><i class="far fa-solid fa-users"></i></span>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">User Aktif</span>
-                                    <span class="info-box-number">410</span>
+                                    <span class="info-box-text">Pegawai inactive</span>
+                                    <span class="info-box-number">{{ $pegawaiInactive }}</span>
                                 </div>
                             </div>
                         </div>
