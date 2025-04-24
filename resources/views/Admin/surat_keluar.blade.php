@@ -145,7 +145,7 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Surat Masuk</li>
+                                <li class="breadcrumb-item active">Surat Keluar</li>
                             </ol>
                         </div>
                     </div>
@@ -172,32 +172,32 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">No</th>
-                                                <th>Dari</th>
+                                                <th>Nomor Surat</th>
+                                                <th>Pengirim</th>
+                                                <th>Tujuan</th>
                                                 <th>Tembusan</th>
-                                                <th>Tanggal</th>
-                                                <th>Nomor</th>
+                                                <th>Tanggal Masuk</th>
                                                 <th>Sifat</th>
-                                                <th>Lampiran</th>
                                                 <th>Perihal</th>
-                                                <th>Isi Surat</th>
-                                                <th>Review</th>
-                                                <th>Tanda Tangan</th>
+                                                <th>Reviewer</th>
+                                                <th>Penandatangan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Dari aku</td>
-                                                <td>Kemana ya</td>
-                                                <td>2023-10-01</td>
-                                                <td>123/456</td>
-                                                <td>Rahasia</td>
-                                                <td>1</td>
-                                                <td>Perihal penting</td>
-                                                <td>Isi surat yang sangat panjang dan bertele-tele</td>
-                                                <td>ACC Bos</td>
-                                                <td>Done</td>
-                                            </tr>
+                                            @foreach ($suratKeluar as $index => $surat)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $surat->nomor_surat }}</td>
+                                                    <td>{{ $surat->pengirim }}</td>
+                                                    <td>{{ $surat->tujuan }}</td>
+                                                    <td>{{ $surat->tembusan }}</td>
+                                                    <td>{{ $surat->tanggal_masuk }}</td>
+                                                    <td>{{ $surat->sifat }}</td>
+                                                    <td>{{ $surat->perihal }}</td>
+                                                    <td>{{ $surat->reviewer }}</td>
+                                                    <td>{{ $surat->penandatangan }}</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

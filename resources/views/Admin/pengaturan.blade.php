@@ -172,20 +172,22 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4 text-center">
-                                                @if($user->foto)
-                                                    <img src="{{ asset('storage/foto/' . $user->foto) }}" alt="Foto Profil"
-                                                        class="img-fluid rounded-circle mb-2"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
+                                                @if($user->photo)
+                                                    <img src="{{ asset('storage/' . $user->photo) }}" 
+                                                         alt="Foto Profil" 
+                                                         class="img-fluid rounded-circle mb-2"
+                                                         style="width: 150px; height: 150px; object-fit: cover;">
                                                 @else
-                                                    <img src="{{ asset('storage/assets/default-avatar.png') }}"
-                                                        alt="Default Foto" class="img-fluid rounded-circle mb-2"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
+                                                    <img src="{{ asset('storage/assets/default-avatar.png') }}" 
+                                                         alt="Default Foto" 
+                                                         class="img-fluid rounded-circle mb-2"
+                                                         style="width: 150px; height: 150px; object-fit: cover;">
                                                 @endif
                                                 <div class="mt-2">
-                                                    <label for="foto" class="form-label d-block">Foto Profil</label>
+                                                    <label for="photo" class="form-label d-block">Photo Profil</label>
                                                     <div class="btn btn-light btn-file">
-                                                        <i class="fas fa-paperclip"></i> Upload Foto
-                                                        <input type="file" name="foto" id="foto">
+                                                        <i class="fas fa-paperclip"></i> Upload Photo
+                                                        <input type="file" name="photo" id="photo">
                                                     </div>
                                                 </div>
                                             </div>
