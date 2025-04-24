@@ -197,7 +197,7 @@
                                 <span class="info-box-icon bg-success"><i class="far fa-solid fa-envelope"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Surat Masuk</span>
-                                    <span class="info-box-number">13,648</span>
+                                    <span class="info-box-number">13,64</span>
                                 </div>
                             </div>
                         </div>
