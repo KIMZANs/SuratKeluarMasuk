@@ -11,8 +11,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <!-- Bootstrap 4 -->
+    <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 Bootstrap4 Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css" rel="stylesheet">
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -88,13 +97,13 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.jabatan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fa-regular fa-circle"></i>
                                         <p>Jabatan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('admin.goljabatan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fa-regular fa-circle"></i>
                                         <p>Jabatan Golongan</p>
                                     </a>
                                 </li>
@@ -162,7 +171,10 @@
                                     <input type="text" class="form-control" placeholder="Search">
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-primary">Tambah</button>
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                        data-target="#modalTambahSuratMasuk">
+                                        Tambah
+                                    </button>
                                 </div>
                             </div>
                             <div class="card shadow-none">
@@ -177,8 +189,9 @@
                                                 <th>Tanggal</th>
                                                 <th>Nomor</th>
                                                 <th>Sifat</th>
-                                                <th>Lampiran</th>
                                                 <th>Perihal</th>
+                                                <th style="width: 10px">Detail</th>
+                                                <th style="width: 10px">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -189,8 +202,20 @@
                                                 <td>2023-10-01</td>
                                                 <td>123/456</td>
                                                 <td>Rahasia</td>
-                                                <td>1</td>
                                                 <td>Perihal penting</td>
+                                                <td>
+                                                    <button class="btn btn-info btn-sm">
+                                                        Lihat Detail
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm">
+                                                        Edit
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm">
+                                                        Hapus
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -232,12 +257,101 @@
     </div>
     <!-- ./wrapper -->
 
+    <!-- Modal Tambah Jabatan -->
+    <div class="modal fade" id="modalTambahSuratMasuk" tabindex="-1" role="dialog"
+        aria-labelledby="modalTambahSuratMasukLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="#" method="POST">
+                @csrf
+                <div class="modal-content shadow-none">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTambahSuratMasukLabel">Tambah Surat Masuk</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Dari</label>
+                            <select class="select2" name="dari" style="width: 100%;">
+                                <option>Dari Kamu</option>
+                                <option>Dari Dia</option>
+                                <option>Dari Aku</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tembusan</label>
+                            <select class="select2" multiple="multiple" data-placeholder="Pilih tembusan"
+                                style="width: 100%;">
+                                <option>Kepala Biro Administrasi Akademik dan Perencanaan</option>
+                                <option>Kepala Biro Administrasi Umum dan Keuangan</option>
+                                <option>Kepala Bagian Perencanaan</option>
+                                <option>Kepala Bagian Umum dan Perlengkapan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Surat</label>
+                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#reservationdate" name="tanggal_surat" />
+                                <div class="input-group-append" data-target="#reservationdate"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Sifat</label>
+                            <select class="select2" name="sifat" style="width: 100%;">
+                                <option>Penting</option>
+                                <option>Biasa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Perihal</label>
+                            <textarea id="summernote">
+                Place <em>some</em> <u>text</u> <strong>here</strong>
+              </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.modal -->
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Tempus Dominus / Datetimepicker -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.39.0/build/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+    <!-- Initialize -->
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                dropdownParent: $('#modalTambahSuratMasuk') // ✅ ini sesuai ID modal
+            });
+            $('#reservationdate').datetimepicker({
+                format: 'DD MMMM YYYY',
+                locale: 'id'
+            });
+            $('#summernote').summernote()
+        });
+    </script>
 </body>
 
 </html>

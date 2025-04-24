@@ -88,13 +88,13 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.jabatan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fa-regular fa-circle"></i>
                                         <p>Jabatan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('admin.goljabatan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fa-regular fa-circle"></i>
                                         <p>Jabatan Golongan</p>
                                     </a>
                                 </li>
@@ -145,7 +145,7 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Surat Masuk</li>
+                                <li class="breadcrumb-item active">Surat Keluar</li>
                             </ol>
                         </div>
                     </div>
