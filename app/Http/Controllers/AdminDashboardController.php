@@ -59,8 +59,6 @@ class AdminDashboardController extends Controller
             'nip' => 'required|string|max:20|unique:users,nip',
             'email' => 'required|email|unique:users,email',
             'role' => 'required|in:pengguna,reviewer,penandatangan',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk foto
-            'unit_kerja' => 'required|string|max:255',
             'password' => 'required|string|min:8',
         ]);
 
@@ -70,7 +68,6 @@ class AdminDashboardController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
-            'photo' => $request->file('photo') ? $request->file('photo')->store('photos', 'public') : null, // Simpan foto jika ada
             'unit_kerja' => $request->unit_kerja,
             'status' => 'inactive', // Default status
         ]);

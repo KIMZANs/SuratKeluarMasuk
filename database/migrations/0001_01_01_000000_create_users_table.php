@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'pengguna', 'penandatangan', 'reviewer']);
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('unit_kerja'); // Kolom untuk menyimpan unit kerja
+            $table->enum('unit_kerja', ['Unit Kerja 1', 'Unit Kerja 2', 'Unit Kerja 3']);
             $table->text('photo')->nullable(); // Kolom untuk menyimpan path foto
             $table->timestamps();
         });
@@ -34,7 +34,7 @@ return new class extends Migration
             'password' => Hash::make('admin'), // Password diubah menjadi 'admin'
             'role' => 'admin',
             'status' => 'active',
-            'unit_kerja' => 'Admin Unit Kerja',
+            'unit_kerja' => 'Unit Kerja 1', // Ganti dengan unit kerja yang sesuai
             'photo' => 'assets/Logo_IPDN.png',
             'created_at' => now(),
             'updated_at' => now()

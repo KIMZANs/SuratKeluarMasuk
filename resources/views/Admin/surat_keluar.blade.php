@@ -181,6 +181,7 @@
                                                 <th>Perihal</th>
                                                 <th>Reviewer</th>
                                                 <th>Penandatangan</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
