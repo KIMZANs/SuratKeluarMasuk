@@ -14,9 +14,9 @@
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <!-- Select2 Bootstrap4 Theme -->
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
     <!-- Tempus Dominus Bootstrap 4 -->
@@ -290,6 +290,26 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>Nomor Surat</label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="000.5">
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <span>/</span>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="001">
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <span>/</span>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="IPDN XX">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label>Tanggal Surat</label>
                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input"
@@ -333,7 +353,7 @@
     <!-- Moment.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- Tempus Dominus / Datetimepicker -->
     <script
         src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.39.0/build/js/tempusdominus-bootstrap-4.min.js"></script>
