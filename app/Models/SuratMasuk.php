@@ -13,6 +13,7 @@ class SuratMasuk extends Model
     protected $fillable = [
         'nomor_surat',
         'pengirim',
+        'tujuan',
         'perihal',
         'tanggal_surat',
         'tanggal_diterima',

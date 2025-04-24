@@ -15,10 +15,13 @@ class SuratKeluar extends Model
     // Kolom yang dapat diisi secara massal
     protected $fillable = [
         'nomor_surat',
+        'pengirim',
         'tujuan',
+        'tembusan',
+        'tanggal_masuk',
+        'sifat',
         'perihal',
-        'tanggal_surat',
-        'keterangan',
-        'file_surat',
+        'reviewer',
+        'penandatangan',
     ];
 }

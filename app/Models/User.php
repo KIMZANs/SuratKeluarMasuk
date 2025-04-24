@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'photo', // Menambahkan kolom untuk file foto
+        'unit_kerja', // Menambahkan kolom untuk unit kerja
     ];
 
     /**

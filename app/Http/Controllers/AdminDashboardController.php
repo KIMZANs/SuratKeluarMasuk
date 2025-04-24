@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Jabatan;
 use App\Models\GolonganJabatan;
+use App\Models\SuratKeluar;
+use App\Models\SuratMasuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -57,6 +59,8 @@ class AdminDashboardController extends Controller
             'nip' => 'required|string|max:20|unique:users,nip',
             'email' => 'required|email|unique:users,email',
             'role' => 'required|in:pengguna,reviewer,penandatangan',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk foto
+            'unit_kerja' => 'required|string|max:255',
             'password' => 'required|string|min:8',
         ]);
 
@@ -66,6 +70,8 @@ class AdminDashboardController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
+            'photo' => $request->file('photo') ? $request->file('photo')->store('photos', 'public') : null, // Simpan foto jika ada
+            'unit_kerja' => $request->unit_kerja,
             'status' => 'inactive', // Default status
         ]);
 
@@ -128,7 +134,10 @@ class AdminDashboardController extends Controller
 
     public function indexsurat_keluar()
     {
-        // Logika untuk dashboard surat keluar
-        return view('Admin.surat_keluar');
+        // Ambil semua data dari tabel surat_keluar
+        $suratKeluar = \App\Models\SuratKeluar::all();
+
+        // Kirim data ke view
+        return view('Admin.surat_keluar', compact('suratKeluar'));
     }
 }

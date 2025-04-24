@@ -1,4 +1,3 @@
-<!-- filepath: c:\xampp\htdocs\Surat\resources\views\Admin\pegawai.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -118,7 +117,7 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('admin.surat_masuk') }}" class="nav-link">
                                     <i class="nav-icon fa-solid fa-envelope"></i>
                                     <p>
                                         Surat Masuk
@@ -127,7 +126,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('admin.surat_keluar') }}" class="nav-link">
                                     <i class="nav-icon fa-solid fa-envelope"></i>
                                     <p>
                                         Surat Keluar
@@ -334,6 +333,21 @@
                                         <option value="penandatangan">Penandatangan</option>
                                     </select>
                                 </div>
+                                <div>
+                                    <label for="photo" class="form-label">Photo</label>
+                                    <input type="file" name="photo" id="photo" class="form-control" accept=".jpg, .jpeg, .png">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="photo" class="form-label d-block">Photo Profil</label>
+                                    <div class="btn btn-light btn-file">
+                                        <i class="fas fa-paperclip"></i> Upload Photo
+                                        <input type="file" name="photo" id="photo" accept="image/*" class="form-control-file">
+                                    </div>
+                                </div>
+                                <form id="photo-upload-form" action="{{ route('users.updatePhoto', Auth::user()->id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="file" name="photo" id="photo-input" style="display: none;">
+                                </form>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <div class="input-group">
@@ -452,6 +466,32 @@
                 });
             </script>
 
+            <script>
+                $(document).ready(function () {
+                    $('#photo').on('change', function () {
+                        var formData = new FormData($('#photo-upload-form')[0]);
+                        $.ajax({
+                            url: $('#photo-upload-form').attr('action'),
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    // Perbarui foto profil di tampilan
+                                    $('img[alt="Logo IPDN"]').attr('src', response.photo_url);
+                                    alert('Foto berhasil diperbarui!');
+                                } else {
+                                    alert('Gagal memperbarui foto.');
+                                }
+                            },
+                            error: function () {
+                                alert('Terjadi kesalahan saat mengunggah foto.');
+                            }
+                        });
+                    });
+                });
+            </script>
 
             <!-- AdminLTE JS -->
             <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
