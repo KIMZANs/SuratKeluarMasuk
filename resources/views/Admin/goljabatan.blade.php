@@ -13,16 +13,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <!-- Bootstrap 4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- AdminLTE Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- AdminLTE CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" rel="stylesheet">
-    <!-- AdminLTE Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -109,7 +99,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.surat_masuk') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Masuk
@@ -118,7 +108,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.surat_keluar') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Keluar
@@ -148,15 +138,14 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Golongan Jabatan</h1>
+                            <h1>Jabatan Golongan</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('admin.dashboard') }}">Dashboard</a>
                                 </li>
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('admin.dashboard') }}">Daftar Jabatan</a>
+                                <li class="breadcrumb-item active">Daftar Jabatan</li>
                                 </li>
                                 <li class="breadcrumb-item active">Jabatan Golongan</li>
                             </ol>
@@ -168,81 +157,164 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    <!-- Flash Message -->
-                    @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    @endif
-
-                    <!-- Tabel Golongan Jabatan -->
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card shadow-sm">
-                                <div class="card-header bg-primary text-white">
-                                    <h3 class="card-title mb-0">Daftar Golongan Jabatan</h3>
-                                    <div class="card-tools d-flex align-items-center gap-2">
-                                        <!-- Search Bar -->
-                                        <div class="input-group input-group-sm" style="width: 250px;">
-                                            <input type="text" name="table_search" class="form-control" placeholder="Cari nama golongan...">
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-default">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Tombol Tambah Golongan -->
-                                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#tambahGolonganModal">
-                                            <i class="fas fa-plus"></i> Tambah Golongan Jabatan
-                                        </button>
-                                    </div>
+                        <div class="col-md-12">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Search">
                                 </div>
-
+                                <div class="col-auto">
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                        data-target="#modalTambahJabatan">
+                                        Tambah
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card shadow-none">
+                                <!-- /.card-header -->
                                 <div class="card-body table-responsive p-0">
-                                    <table class="table table-hover text-nowrap">
+                                    <table class="table table-head-fixed text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Nama Golongan</th>
-                                                <th>Deskripsi</th>
-                                                <th>Aksi</th>
+                                                <th style="width: 10px">No</th>
+                                                <th>Jabatan</th>
+                                                <th>Golongan</th>
+                                                <th style="width: 10px">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($golonganJabatan as $index => $golongan)
                                             <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $golongan->nama_jabatan }}</td>
-                                                <td>{{ $golongan->nama_golongan }}</td>
+                                                <td>1</td>
+                                                <td>Kepala Divisi</td>
+                                                <td>IV</td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-info">
-                                                        <i class="fas fa-edit"></i>
+                                                    <button class="btn btn-sm btn-primary" data-toggle="modal"
+                                                        data-target="#modalEditJabatan">
+                                                        Edit
                                                     </button>
-                                                    <button class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash-alt"></i>
+                                                    <button class="btn btn-sm btn-danger" data-toggle="modal"
+                                                        data-target="#modalHapusJabatan">
+                                                        Delete
                                                     </button>
                                                 </td>
                                             </tr>
-                                            @empty
-                                            <tr>
-                                                <td colspan="4" class="text-center">Tidak ada data golongan jabatan.</td>
-                                            </tr>
-                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
+                                <div class="card-footer clearfix">
+                                    <ul class="pagination pagination-sm m-0 float-right">
+                                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                    </ul>
+                                </div>
                             </div>
                             <!-- /.card -->
                         </div>
+                        <!-- /.card -->
                     </div>
                 </div>
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+
+        <!-- Modal Tambah Jabatan -->
+        <div class="modal fade" id="modalTambahJabatan" tabindex="-1" role="dialog"
+            aria-labelledby="modalTambahJabatanLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{ route('admin.jabatan.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-content shadow-none">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTambahJabatanLabel">Tambah Jabatan Golongan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="jabatan">Nama Jabatan</label>
+                                <input type="text" class="form-control" id="jabatan" name="jabatan" required
+                                    placeholder="Masukan nama jabatan">
+                            </div>
+                            <div class="form-group">
+                                <label for="keterangan">Golongan</label>
+                                <input type="text" class="form-control" id="keterangan" name="keterangan"
+                                    placeholder="Masukan keterangan">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal -->
+
+        <!-- Modal Edit Jabatan -->
+        <div class="modal fade" id="modalEditJabatan" tabindex="-1" role="dialog"
+            aria-labelledby="modalEditJabatanLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form>
+                    <div class="modal-content shadow-none">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditJabatanLabel">Edit Jabatan Golongan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="edit-jabatan">Nama Jabatan</label>
+                                <input type="text" class="form-control" id="edit-jabatan" name="jabatan"
+                                    placeholder="Masukan nama jabatan">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-keterangan">Golongan</label>
+                                <input type="text" class="form-control" id="edit-keterangan" name="keterangan"
+                                    placeholder="Masukan keterangan">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal -->
+
+        <!-- Modal Konfirmasi Hapus Jabatan -->
+        <div class="modal fade" id="modalHapusJabatan" tabindex="-1" role="dialog"
+            aria-labelledby="modalHapusJabatanLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form>
+                    <div class="modal-content shadow-none">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalHapusJabatanLabel">Hapus Jabatan Golongan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin ingin menghapus jabatan Golongan ini?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Ya, Hapus</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal -->
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
@@ -260,42 +332,10 @@
     </div>
     <!-- ./wrapper -->
 
-    <!-- Modal Tambah Golongan Jabatan -->
-    <div class="modal fade" id="tambahGolonganModal" tabindex="-1" aria-labelledby="tambahGolonganModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="tambahGolonganModalLabel">Tambah Golongan Jabatan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('admin.goljabatan.store') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="nama_golongan" class="form-label">Nama Golongan</label>
-                            <input type="text" name="nama_golongan" id="nama_golongan" class="form-control" placeholder="Masukkan nama golongan" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea name="deskripsi" id="deskripsi" class="form-control" placeholder="Masukkan deskripsi (opsional)"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success">Simpan</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- AdminLTE JS -->
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
