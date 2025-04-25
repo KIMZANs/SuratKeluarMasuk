@@ -33,7 +33,11 @@ Route::prefix('admin')->group(function () {
     Route::get('/goljabatan', [AdminDashboardController::class, 'indexGolonganJabatan'])->name('admin.goljabatan');
     Route::post('/goljabatan/store', [AdminDashboardController::class, 'storeGolonganJabatan'])->name('admin.goljabatan.store');
     Route::get('/surat_masuk', [AdminDashboardController::class, 'indexSurat_masuk'])->name('admin.surat_masuk');
+    Route::post('/admin/surat_masuk', [AdminDashboardController::class, 'storeSuratMasuk'])->name('admin.surat_masuk.store');
     Route::get('/surat_keluar', [AdminDashboardController::class, 'indexSurat_keluar'])->name('admin.surat_keluar');
+    Route::get('/surat_masuk/{id}', [AdminDashboardController::class, 'showSuratMasuk'])->name('admin.surat_masuk.show');
+    Route::post('/surat_masuk/{id}/update', [AdminDashboardController::class, 'updateSuratMasuk'])->name('admin.surat_masuk.update');
+    Route::delete('/surat_masuk/{id}', [AdminDashboardController::class, 'deleteSuratMasuk'])->name('admin.surat_masuk.delete');
 });
 
 // Route untuk pengguna dashboard

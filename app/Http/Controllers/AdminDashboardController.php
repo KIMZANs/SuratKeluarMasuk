@@ -7,8 +7,10 @@ use App\Models\Jabatan;
 use App\Models\GolonganJabatan;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class AdminDashboardController extends Controller
 {
@@ -17,9 +19,12 @@ class AdminDashboardController extends Controller
         // Hitung jumlah pegawai aktif dan tidak aktif
     $pegawaiActive = \App\Models\User::where('status', 'active')->where('role', '!=', 'admin')->count();
     $pegawaiInactive = \App\Models\User::where('status', 'inactive')->where('role', '!=', 'admin')->count();
+    $totalSuratMasuk = SuratMasuk::count();
+    $totalSuratKeluar = SuratKeluar::count();
+
 
     // Kirim data ke view
-        return view('Admin.dashboard', compact('pegawaiActive', 'pegawaiInactive'));
+        return view('Admin.dashboard', compact('pegawaiActive', 'pegawaiInactive', 'totalSuratMasuk', 'totalSuratKeluar'));
     }
 
     public function indexPegawai(Request $request)
@@ -33,6 +38,7 @@ class AdminDashboardController extends Controller
                              ->orWhere('nip', 'like', "%{$search}%");
             })
             ->get();
+        
 
         return view('Admin.pegawai', compact('users'));
     }
@@ -55,16 +61,21 @@ class AdminDashboardController extends Controller
     public function storePegawai(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'nip' => 'required|string|max:20|unique:users,nip',
+            'tempat_lahir' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email',
             'role' => 'required|in:pengguna,reviewer,penandatangan',
             'password' => 'required|string|min:8',
+            'unit_kerja' => 'required|in:Unit Kerja 1,Unit Kerja 2,Unit Kerja 3', // Ganti dengan unit kerja yang sesuai
         ]);
 
         User::create([
-            'name' => $request->name,
+            'nama' => $request->nama,
             'nip' => $request->nip,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
@@ -123,10 +134,64 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.goljabatan')->with('success', 'Golongan Jabatan berhasil ditambahkan.');
     }
 
+    public function storeSuratMasuk(Request $request)
+    {
+        $request->validate([
+            'nomor_surat' => 'required|array',
+            'nomor_surat.*' => 'required|string',
+            'pengirim' => 'required|string',
+            'tembusan' => 'nullable|array',
+            'tanggal' => 'required|date',
+            'sifat' => 'required|string',
+            'perihal' => 'required|string',
+        ]);
+
+        $nomorSurat = implode('/', $request->nomor_surat);
+
+        // Convert the date to the correct format
+        $formattedDate = Carbon::createFromFormat('d F Y', $request->tanggal_masuk)->format('Y-m-d');
+
+        SuratMasuk::create([
+            'nomor_surat' => $nomorSurat,
+            'pengirim' => $request->pengirim,
+            'tembusan' => $request->tembusan ? implode(', ', $request->tembusan) : null,
+            'tanggal' => $formattedDate,
+            'sifat' => $request->sifat,
+            'perihal' => $request->perihal,
+        ]);
+
+        return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil ditambahkan.');
+    }
+
     public function indexsurat_masuk()
     {
+        // Ambil semua data dari tabel surat_masuk
+        $suratmasuk = \App\Models\SuratMasuk::all();
+
         // Logika untuk dashboard surat masuk
-        return view('Admin.surat_masuk');
+        return view('Admin.surat_masuk', compact('suratmasuk'));
+    }
+
+    public function showSuratMasuk($id)
+    {
+        $surat = SuratMasuk::findOrFail($id);
+        return response()->json($surat); // Kirim data sebagai JSON untuk modal
+    }
+
+    public function updateSuratMasuk(Request $request, $id)
+    {
+        $surat = SuratMasuk::findOrFail($id);
+        $surat->update($request->all());
+
+        return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil diperbarui.');
+    }
+
+    public function deleteSuratMasuk($id)
+    {
+        $surat = SuratMasuk::findOrFail($id);
+        $surat->delete();
+
+        return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil dihapus.');
     }
 
     public function indexsurat_keluar()

@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('pengirim'); // Pengirim surat
             $table->string('tujuan'); // Tujuan surat
             $table->string('tembusan'); // Tembusan surat
-            $table->string('tanggal_masuk'); // Tanggal surat
+            $table->string('tanggal'); // Tanggal surat
             $table->string('sifat'); // Sifat surat
             $table->string('perihal'); // Perihal surat
+            $table->string('isi_surat'); // Isi surat
             $table->enum('reviewer', ['diproses', 'selesai']); // Status surat 
             $table->enum('penandatangan', ['diproses', 'selesai']); // Status surat
             $table->timestamps(); // Kolom created_at dan updated_at

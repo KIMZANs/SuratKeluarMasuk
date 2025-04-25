@@ -233,10 +233,12 @@
                                                     <th>No</th>
                                                     <th>Nama</th>
                                                     <th>NIP</th>
+                                                    <th>Tempat Lahir</th>
+                                                    <th>Tempat Lahir</th>
                                                     <th>Email</th>
                                                     <th>Role</th>
-                                                    <th>Unit Kerja</th>
                                                     <th>Status</th>
+                                                    <th>Unit Kerja</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -244,11 +246,12 @@
                                                 @forelse ($users as $index => $user)
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $user->name }}</td>
+                                                        <td>{{ $user->nama }}</td>
                                                         <td>{{ $user->nip ?? '-' }}</td>
+                                                        <td>{{ $user->tempat_lahir ?? '-' }}</td>
+                                                        <td>{{ $user->tanggal_lahir ?? '-' }}</td>
                                                         <td>{{ $user->email }}</td>
                                                         <td>{{ ucfirst($user->role) }}</td>
-                                                        <td>{{ $user->unit_kerja ?? '-' }}</td>
                                                         <td>
                                                             <button type="button"
                                                                 class="btn btn-sm {{ $user->status === 'active' ? 'btn-success' : 'btn-danger' }}"
@@ -257,6 +260,7 @@
                                                                 {{ ucfirst($user->status) }}
                                                             </button>
                                                         </td>
+                                                        <td>{{ $user->unit_kerja ?? '-' }}</td> <!-- Tampilkan nama unit kerja -->
                                                         <td>
                                                             <button type="button" class="btn btn-sm btn-danger"
                                                                 data-bs-toggle="modal" data-bs-target="#hapusPegawaiModal"
@@ -267,8 +271,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="7" class="text-center">Tidak ada data yang
-                                                            ditemukan</td>
+                                                        <td colspan="10" class="text-center">Tidak ada data yang ditemukan</td>
                                                     </tr>
                                                 @endforelse
                                             </tbody>
@@ -303,25 +306,36 @@
                             <form action="{{ route('admin.pegawai.store') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nama Pegawai</label>
-                                    <input type="text" name="name" id="name" class="form-control"
-                                        placeholder="Masukkan nama pegawai" required>
-                                    @error('name')
+                                    <label for="nama" class="form-label">Nama Pegawai</label>
+                                    <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama pegawai" required>
+                                    @error('nama')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="nip" class="form-label">NIP</label>
-                                    <input type="text" name="nip" id="nip" class="form-control"
-                                        placeholder="Masukkan NIP pegawai" required>
+                                    <input type="text" name="nip" id="nip" class="form-control" placeholder="Masukkan NIP pegawai" required>
                                     @error('nip')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
+                                    <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                                    <input type="text" name="tempat_lahir" id="tempat_lahir" class="form-control" placeholder="Masukkan tempat lahir" required>
+                                    @error('tempat_lahir')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" required>
+                                    @error('tanggal_lahir')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" id="email" class="form-control"
-                                        placeholder="Masukkan email pegawai" required>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Masukkan email pegawai" required>
                                     @error('email')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -335,24 +349,21 @@
                                         <option value="penandatangan">Penandatangan</option>
                                     </select>
                                 </div>
-                                <div>
+                                <div class="mb-3">
                                     <label for="unit_kerja" class="form-label">Unit Kerja</label>
                                     <select name="unit_kerja" id="unit_kerja" class="form-select" required>
                                         <option value="" disabled selected>Pilih Unit Kerja</option>
-                                        <option value="1">Unit Kerja 1</option>
-                                        <option value="2">Unit Kerja 2</option>
-                                        <option value="3">Unit Kerja 3</option>
+                                        <option value="Unit Kerja 1">Unit Kerja 1</option>
+                                        <option value="Unit Kerja 2">Unit Kerja 2</option>
+                                        <option value="Unit Kerja 3">Unit Kerja 3</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" name="password" id="password" class="form-control"
-                                            placeholder="Masukkan password" required>
-                                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                    </div>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" required>
+                                    @error('password')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>

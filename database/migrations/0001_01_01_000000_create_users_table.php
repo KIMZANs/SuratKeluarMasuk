@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('nama');
             $table->string('nip')->unique();
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', ['admin', 'pengguna', 'penandatangan', 'reviewer']);
@@ -28,8 +30,10 @@ return new class extends Migration
 
         // Tambahkan akun admin langsung
         DB::table('users')->insert([
-            'name' => 'Admin',
-            'nip' => '1234567890',  
+            'nama' => 'Admin',
+            'nip' => '1234567890',
+            'tempat_lahir' => 'Jakarta',
+            'tanggal_lahir' => '1990-01-01',  
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin'), // Password diubah menjadi 'admin'
             'role' => 'admin',

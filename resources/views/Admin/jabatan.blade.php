@@ -186,10 +186,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @forelse ($jabatans as $index => $jabatan)
                                             <tr>
-                                                <td>1</td>
-                                                <td>Kepala Divisi</td>
-                                                <td>LPDSI</td>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $user->nama_jabatan }}</td>
+                                                <td>{{ $user->keterangan ?? '-' }}</td>
                                                 <td>
                                                     <button class="btn btn-sm btn-primary" data-toggle="modal"
                                                         data-target="#modalEditJabatan">
@@ -241,7 +242,7 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="jabatan">Nama Jabatan</label>
-                                <input type="text" class="form-control" id="jabatan" name="jabatan" required
+                                <input type="text" class="form-control" id="jabatan" name="nama_jabatan" required
                                     placeholder="Masukan nama jabatan">
                             </div>
                             <div class="form-group">

@@ -183,11 +183,11 @@
                                     <table class="table table-head-fixed text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th style="width: 10px">No</th>
-                                                <th>Dari</th>
+                                                <th>No</th>
+                                                <th>Nomor Surat</th>
+                                                <th>Pengirim</th>
                                                 <th>Tembusan</th>
                                                 <th>Tanggal</th>
-                                                <th>Nomor</th>
                                                 <th>Sifat</th>
                                                 <th>Perihal</th>
                                                 <th style="width: 10px">Detail</th>
@@ -195,28 +195,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($suratmasuk as $index => $surat)
                                             <tr>
-                                                <td>1</td>
-                                                <td>Dari aku</td>
-                                                <td>Kemana ya</td>
-                                                <td>2023-10-01</td>
-                                                <td>123/456</td>
-                                                <td>Rahasia</td>
-                                                <td>Perihal penting</td>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $surat->nomor_surat }}</td>
+                                                <td>{{ $surat->pengirim }}</td>
+                                                <td>{{ $surat->tembusan }}</td>
+                                                <td>{{ $surat->tanggal }}</td>
+                                                <td>{{ $surat->sifat }}</td>
+                                                <td>{{ $surat->perihal }}</td>
                                                 <td>
-                                                    <button class="btn btn-info btn-sm">
-                                                        Lihat Detail
-                                                    </button>
+                                                    <button class="btn btn-info btn-sm" onclick="lihatDetail({{ $surat->id }})">Lihat Detail</button>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-sm">
-                                                        Edit
-                                                    </button>
-                                                    <button class="btn btn-danger btn-sm">
-                                                        Hapus
-                                                    </button>
+                                                    <button class="btn btn-primary btn-sm" onclick="editSurat({{ $surat->id }})">Edit</button>
+                                                    <form action="{{ route('admin.surat_masuk.delete', $surat->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?')">Hapus</button>
+                                                    </form>
                                                 </td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -261,7 +261,7 @@
     <div class="modal fade" id="modalTambahSuratMasuk" tabindex="-1" role="dialog"
         aria-labelledby="modalTambahSuratMasukLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="#" method="POST">
+            <form action="{{ route('admin.surat_masuk.store') }}" method="POST">
                 @csrf
                 <div class="modal-content shadow-none">
                     <div class="modal-header">
@@ -272,66 +272,74 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Dari</label>
-                            <select class="select2" name="dari" style="width: 100%;">
-                                <option>Dari Kamu</option>
-                                <option>Dari Dia</option>
-                                <option>Dari Aku</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Tembusan</label>
-                            <select class="select2" multiple="multiple" data-placeholder="Pilih tembusan"
-                                style="width: 100%;">
-                                <option>Kepala Biro Administrasi Akademik dan Perencanaan</option>
-                                <option>Kepala Biro Administrasi Umum dan Keuangan</option>
-                                <option>Kepala Bagian Perencanaan</option>
-                                <option>Kepala Bagian Umum dan Perlengkapan</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label>Nomor Surat</label>
                             <div class="row g-2">
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="000.5">
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="000.5" required>
                                 </div>
                                 <div class="col-auto d-flex align-items-center">
                                     <span>/</span>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="001">
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="001" required>
                                 </div>
                                 <div class="col-auto d-flex align-items-center">
                                     <span>/</span>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="IPDN XX">
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="IPDN XX" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Tanggal Surat</label>
+                            <label>Pengirim</label>
+                            <select class="select2" name="pengirim" style="width: 100%;" required>
+                                <option value="" disabled selected>Pilih Pengirim</option>
+                                <option value="Aria">Aria</option>
+                                <option value="Aji">Aji</option>
+                                <option value="Riri">Riri</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tujuan</label>
+                            <select class="select2" name="tujuan" style="width: 100%;" required>
+                                <option value="" disabled selected>Pilih Tujuan</option>
+                                <option value="Rektor">Rektor</option>
+                                <option value="Wakil Rektor">Wakil Rektor</option>
+                                <option value="Kepegawaian">Kepegawaian</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tembusan</label>
+                            <select class="select2" name="tembusan[]" multiple="multiple" data-placeholder="Pilih tembusan"
+                                style="width: 100%;">
+                                <option value="Kepala Biro Administrasi Akademik dan Perencanaan">Kepala Biro Administrasi Akademik dan Perencanaan</option>
+                                <option value="Kepala Biro Administrasi Umum dan Keuangan">Kepala Biro Administrasi Umum dan Keuangan</option>
+                                <option value="Kepala Bagian Perencanaan">Kepala Bagian Perencanaan</option>
+                                <option value="Kepala Bagian Umum dan Perlengkapan">Kepala Bagian Umum dan Perlengkapan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Masuk</label>
                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input"
-                                    data-target="#reservationdate" name="tanggal_surat" />
-                                <div class="input-group-append" data-target="#reservationdate"
-                                    data-toggle="datetimepicker">
+                                <input type="text" name="tanggal_masuk" class="form-control datetimepicker-input" data-target="#reservationdate" required />
+                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Sifat</label>
-                            <select class="select2" name="sifat" style="width: 100%;">
-                                <option>Penting</option>
-                                <option>Biasa</option>
+                            <select class="select2" name="sifat" style="width: 100%;" required>
+                                <option value="Penting">Penting</option>
+                                <option value="Biasa">Biasa</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Perihal</label>
-                            <textarea id="summernote">
-                Place <em>some</em> <u>text</u> <strong>here</strong>
-              </textarea>
+                            <label for="summernote">Perihal</label>
+                            <textarea name="perihal" id="summernote">
+                                 Place <em>some</em> <u>text</u> <strong>here</strong>
+                            </textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -18,7 +18,7 @@ class SuratKeluar extends Model
         'pengirim',
         'tujuan',
         'tembusan',
-        'tanggal_masuk',
+        'tanggal',
         'sifat',
         'perihal',
         'reviewer',
