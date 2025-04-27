@@ -17,13 +17,13 @@ class AdminDashboardController extends Controller
     public function index()
     {
         // Hitung jumlah pegawai aktif dan tidak aktif
-    $pegawaiActive = \App\Models\User::where('status', 'active')->where('role', '!=', 'admin')->count();
-    $pegawaiInactive = \App\Models\User::where('status', 'inactive')->where('role', '!=', 'admin')->count();
-    $totalSuratMasuk = SuratMasuk::count();
-    $totalSuratKeluar = SuratKeluar::count();
+        $pegawaiActive = \App\Models\User::where('status', 'active')->where('role', '!=', 'admin')->count();
+        $pegawaiInactive = \App\Models\User::where('status', 'inactive')->where('role', '!=', 'admin')->count();
+        $totalSuratMasuk = SuratMasuk::count();
+        $totalSuratKeluar = SuratKeluar::count();
 
 
-    // Kirim data ke view
+        // Kirim data ke view
         return view('Admin.dashboard', compact('pegawaiActive', 'pegawaiInactive', 'totalSuratMasuk', 'totalSuratKeluar'));
     }
 
@@ -35,10 +35,10 @@ class AdminDashboardController extends Controller
         $users = User::where('role', '!=', 'admin')
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
-                             ->orWhere('nip', 'like', "%{$search}%");
+                    ->orWhere('nip', 'like', "%{$search}%");
             })
             ->get();
-        
+
 
         return view('Admin.pegawai', compact('users'));
     }
@@ -90,10 +90,9 @@ class AdminDashboardController extends Controller
     {
         $search = $request->input('search');
 
-        // Ambil data jabatan dengan filter pencarian
         $jabatans = Jabatan::when($search, function ($query, $search) {
             return $query->where('nama_jabatan', 'like', "%{$search}%");
-        })->get();
+        })->paginate(2);
 
         return view('Admin.jabatan', compact('jabatans'));
     }
@@ -111,6 +110,30 @@ class AdminDashboardController extends Controller
         ]);
 
         return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil ditambahkan.');
+    }
+
+    public function updateJabatan(Request $request, $id)
+    {
+        $request->validate([
+            'nama_jabatan' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $jabatan = Jabatan::findOrFail($id);
+        $jabatan->update([
+            'nama_jabatan' => $request->nama_jabatan,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil diperbarui.');
+    }
+
+    public function destroyJabatan($id)
+    {
+        $jabatan = Jabatan::findOrFail($id);
+        $jabatan->delete();
+
+        return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil dihapus.');
     }
 
     public function indexGolonganJabatan()

@@ -27,6 +27,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/jabatan', [AdminDashboardController::class, 'indexJabatan'])->name('admin.jabatan');
     Route::post('/jabatan/store', [AdminDashboardController::class, 'storeJabatan'])->name('admin.jabatan.store');
+    Route::put('/admin/jabatan/{id}', [AdminDashboardController::class, 'updateJabatan'])->name('admin.jabatan.update');
+    Route::delete('/admin/jabatan/{id}', [AdminDashboardController::class, 'destroyJabatan'])->name('admin.jabatan.destroy');
     Route::get('/pegawai', [AdminDashboardController::class, 'indexPegawai'])->name('admin.pegawai');
     Route::post('/pegawai/{id}/toggle-status', [AdminDashboardController::class, 'toggleStatus'])->name('admin.pegawai.toggleStatus');
     Route::post('/pegawai/store', [AdminDashboardController::class, 'storePegawai'])->name('admin.pegawai.store');

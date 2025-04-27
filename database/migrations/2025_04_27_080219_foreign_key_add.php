@@ -1,0 +1,55 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::table('surat_masuk', function (Blueprint $table) {
+            $table->foreign('pengirim')->references('id')->on('jabatan')->onDelete('cascade');
+            $table->foreign('tembusan')->references('id')->on('jabatan')->onDelete('cascade');
+        });
+        
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('jabatan')->references('id')->on('jabatan')->onDelete('cascade');
+            $table->foreign('golongan_jabatan')->references('id')->on('golongan_jabatan')->onDelete('cascade');
+            $table->foreign('unit_kerja')->references('id')->on('unit_kerja')->onDelete('cascade');
+        });
+
+        // Insert default admin user
+        DB::table('users')->insert([
+            'nama' => 'Admin',
+            'nip' => '1234567890',
+            'tempat_lahir' => 'Jakarta',
+            'tanggal_lahir' => '1990-01-01',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin'),
+            'role' => 'admin',
+            'status' => 'active',
+            'jabatan' => '1',
+            'golongan_jabatan' => '1',
+            'unit_kerja' => '1',
+            'photo' => 'assets/Logo_IPDN.png',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    }
+
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['jabatan']);
+            $table->dropForeign(['golongan_jabatan']);
+            $table->dropForeign(['unit_kerja']);
+        });
+
+        Schema::table('surat_masuk', function (Blueprint $table) {
+            $table->dropForeign(['pengirim']);
+            $table->dropForeign(['tembusan']);
+        });
+    }
+};

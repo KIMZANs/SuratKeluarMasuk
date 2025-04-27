@@ -11,8 +11,8 @@ class CreateSuratMasukTable extends Migration
         Schema::create('surat_masuk', function (Blueprint $table) {
             $table->id();
             $table->string('nomor_surat');
-            $table->string('pengirim');
-            $table->text('tembusan')->nullable();
+            $table->unsignedBigInteger('pengirim');
+            $table->unsignedBigInteger('tembusan');
             $table->date('tanggal');
             $table->string('sifat');
             $table->text('perihal');

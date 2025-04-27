@@ -13,10 +13,18 @@ return new class extends Migration
     {
         Schema::create('unit_kerja', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_unitkerja'); // Nama unit kerja
-            $table->string('kode_unitkerja'); // Kode unit kerja
-            $table->timestamps(); // Kolom created_at dan updated_at
+            $table->string('nama_unitkerja');
+            $table->string('kode_unitkerja');
+            $table->timestamps();
         });
+
+        // Menambahkan data unit kerja awal
+        DB::table('unit_kerja')->insert([
+            'nama_unitkerja' => 'LPDSI',  
+            'kode_unitkerja' => 'Unit 13',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     /**

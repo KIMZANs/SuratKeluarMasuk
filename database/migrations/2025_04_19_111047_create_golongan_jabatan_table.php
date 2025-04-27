@@ -21,7 +21,7 @@ return new class extends Migration
         // Menambahkan data jabatan awal
         DB::table('golongan_jabatan')->insert([
             'nama_jabatan' => 'Manager',  
-            'nama_golongan' => 'Golongan A',
+            'nama_golongan' => 'Golongan 1',
             'created_at' => now(),
             'updated_at' => now()
         ]);
