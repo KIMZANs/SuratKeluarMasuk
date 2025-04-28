@@ -144,7 +144,7 @@ class AdminDashboardController extends Controller
 
         $golonganJabatan = GolonganJabatan::when($search, function ($query, $search) {
             return $query->where('nama_jabatan', 'like', "%{$search}%");
-        })->paginate(2);
+        })->paginate(10);
 
         return view('Admin.goljabatan', compact('golonganJabatan'));
     }

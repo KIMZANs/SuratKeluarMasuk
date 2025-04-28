@@ -1,4 +1,3 @@
-<!-- filepath: c:\xampp\htdocs\Surat\resources\views\Admin\jabatan.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,11 +163,12 @@
                         <div class="col-md-12">
                             <div class="row mb-3">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Search">
+                                    <form method="GET" action="{{ route('admin.jabatan') }}">
+                                        <input type="text" name="search" class="form-control" placeholder="Search" value="{{ request('search') }}">
+                                    </form>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-primary" data-toggle="modal"
-                                        data-target="#modalTambahJabatan">
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahJabatan">
                                         Tambah
                                     </button>
                                 </div>

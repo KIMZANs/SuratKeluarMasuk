@@ -161,7 +161,10 @@
                         <div class="col-md-12">
                             <div class="row mb-3">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Search">
+                                    <form method="GET" action="{{ route('admin.goljabatan') }}">
+                                        <input type="text" name="search" class="form-control" placeholder="Search"
+                                            value="{{ request('search') }}">
+                                    </form>
                                 </div>
                                 <div class="col-auto">
                                     <button class="btn btn-primary" data-toggle="modal"
