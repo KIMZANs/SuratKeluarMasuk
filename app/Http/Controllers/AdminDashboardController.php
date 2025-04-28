@@ -29,16 +29,15 @@ class AdminDashboardController extends Controller
 
     public function indexPegawai(Request $request)
     {
-        $search = $request->input('search');
-
-        // Ambil data pengguna dengan filter pencarian
-        $users = User::where('role', '!=', 'admin')
+        $search = $request->input('search'); // Ambil input pencarian
+        $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
             ->when($search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('nip', 'like', "%{$search}%");
+                return $query->where(function ($query) use ($search) {
+                    $query->where('nama', 'like', "%{$search}%")
+                          ->orWhere('nip', 'like', "%{$search}%");
+                });
             })
-            ->get();
-
+            ->paginate(10);
 
         return view('Admin.pegawai', compact('users'));
     }
