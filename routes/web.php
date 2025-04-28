@@ -25,15 +25,20 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Route untuk admin dashboard
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    // Route untuk jabatan
     Route::get('/jabatan', [AdminDashboardController::class, 'indexJabatan'])->name('admin.jabatan');
     Route::post('/jabatan/store', [AdminDashboardController::class, 'storeJabatan'])->name('admin.jabatan.store');
-    Route::put('/admin/jabatan/{id}', [AdminDashboardController::class, 'updateJabatan'])->name('admin.jabatan.update');
-    Route::delete('/admin/jabatan/{id}', [AdminDashboardController::class, 'destroyJabatan'])->name('admin.jabatan.destroy');
+    Route::put('/jabatan/{id}', [AdminDashboardController::class, 'updateJabatan'])->name('admin.jabatan.update');
+    Route::delete('/jabatan/{id}', [AdminDashboardController::class, 'destroyJabatan'])->name('admin.jabatan.destroy');
+    // Route untuk Jabatan Golongan
+    Route::get('/goljabatan', [AdminDashboardController::class, 'indexGolonganJabatan'])->name('admin.goljabatan');
+    Route::post('/goljabatan/store', [AdminDashboardController::class, 'storeGolonganJabatan'])->name('admin.goljabatan.store');
+    Route::put('/goljabatan/{id}', [AdminDashboardController::class, 'updateGolonganJabatan'])->name('admin.goljabatan.update');
+    Route::delete('/goljabatan/{id}', [AdminDashboardController::class, 'destroyGolonganJabatan'])->name('admin.goljabatan.destroy');
+
     Route::get('/pegawai', [AdminDashboardController::class, 'indexPegawai'])->name('admin.pegawai');
     Route::post('/pegawai/{id}/toggle-status', [AdminDashboardController::class, 'toggleStatus'])->name('admin.pegawai.toggleStatus');
     Route::post('/pegawai/store', [AdminDashboardController::class, 'storePegawai'])->name('admin.pegawai.store');
-    Route::get('/goljabatan', [AdminDashboardController::class, 'indexGolonganJabatan'])->name('admin.goljabatan');
-    Route::post('/goljabatan/store', [AdminDashboardController::class, 'storeGolonganJabatan'])->name('admin.goljabatan.store');
     Route::get('/surat_masuk', [AdminDashboardController::class, 'indexSurat_masuk'])->name('admin.surat_masuk');
     Route::post('/admin/surat_masuk', [AdminDashboardController::class, 'storeSuratMasuk'])->name('admin.surat_masuk.store');
     Route::get('/surat_keluar', [AdminDashboardController::class, 'indexSurat_keluar'])->name('admin.surat_keluar');

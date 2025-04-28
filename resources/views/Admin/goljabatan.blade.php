@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <button class="btn btn-primary" data-toggle="modal"
-                                        data-target="#modalTambahJabatan">
+                                        data-target="#modalTambahJabatangol">
                                         Tambah
                                     </button>
                                 </div>
@@ -183,32 +183,39 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Kepala Divisi</td>
-                                                <td>IV</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-primary" data-toggle="modal"
-                                                        data-target="#modalEditJabatan">
-                                                        Edit
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger" data-toggle="modal"
-                                                        data-target="#modalHapusJabatan">
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            @forelse ($golonganJabatan as $index => $golongan_jabatan)
+                                                <tr>
+                                                    <td>{{ $golonganJabatan->firstItem() + $index }}</td>
+                                                    <td>{{ $golongan_jabatan->nama_jabatan }}</td>
+                                                    <td>{{ $golongan_jabatan->nama_golongan }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-primary"
+                                                            data-toggle="modal" data-target="#modalEditJabatangol"
+                                                            data-id="{{ $golongan_jabatan->id }}"
+                                                            data-nama_jabatan="{{ $golongan_jabatan->nama_jabatan }}"
+                                                            data-nama_golongan="{{ $golongan_jabatan->nama_golongan }}">
+                                                            Edit
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-toggle="modal" data-target="#modalHapusJabatangol"
+                                                            data-id="{{ $golongan_jabatan->id }}"
+                                                            data-nama="{{ $golongan_jabatan->nama_jabatan }}">
+                                                            Delete
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center">Tidak ada data jabatan.</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
                                     <ul class="pagination pagination-sm m-0 float-right">
-                                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                        {{ $golonganJabatan->links('pagination::bootstrap-4') }}
                                     </ul>
                                 </div>
                             </div>
@@ -223,10 +230,10 @@
         <!-- /.content-wrapper -->
 
         <!-- Modal Tambah Jabatan -->
-        <div class="modal fade" id="modalTambahJabatan" tabindex="-1" role="dialog"
+        <div class="modal fade" id="modalTambahJabatangol" tabindex="-1" role="dialog"
             aria-labelledby="modalTambahJabatanLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{{ route('admin.jabatan.store') }}" method="POST">
+                <form action="{{ route('admin.goljabatan.store') }}" method="POST">
                     @csrf
                     <div class="modal-content shadow-none">
                         <div class="modal-header">
@@ -238,13 +245,13 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="jabatan">Nama Jabatan</label>
-                                <input type="text" class="form-control" id="jabatan" name="jabatan" required
+                                <input type="text" class="form-control" id="jabatan" name="nama_jabatan" required
                                     placeholder="Masukan nama jabatan">
                             </div>
                             <div class="form-group">
-                                <label for="keterangan">Golongan</label>
-                                <input type="text" class="form-control" id="keterangan" name="keterangan"
-                                    placeholder="Masukan keterangan">
+                                <label for="golongan">Golongan</label>
+                                <input type="text" class="form-control" id="golongan" name="nama_golongan" required
+                                    placeholder="Masukan golongan jabatan">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -258,27 +265,29 @@
         <!-- /.modal -->
 
         <!-- Modal Edit Jabatan -->
-        <div class="modal fade" id="modalEditJabatan" tabindex="-1" role="dialog"
-            aria-labelledby="modalEditJabatanLabel" aria-hidden="true">
+        <div class="modal fade" id="modalEditJabatangol" tabindex="-1" role="dialog"
+            aria-labelledby="modalEditJabatangolLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form>
+                <form method="POST" id="formEditJabatangol">
+                    @csrf
+                    @method('PUT')
                     <div class="modal-content shadow-none">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalEditJabatanLabel">Edit Jabatan Golongan</h5>
+                            <h5 class="modal-title" id="modalEditJabatangolLabel">Edit Jabatan Golongan</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="edit-jabatan">Nama Jabatan</label>
-                                <input type="text" class="form-control" id="edit-jabatan" name="jabatan"
-                                    placeholder="Masukan nama jabatan">
+                                <label for="nama_jabatan">Nama Jabatan</label>
+                                <input type="text" class="form-control" id="edit_nama_jabatan" name="nama_jabatan"
+                                    value="{{ old('nama_jabatan') }}" required placeholder="Masukkan nama jabatan">
                             </div>
                             <div class="form-group">
-                                <label for="edit-keterangan">Golongan</label>
-                                <input type="text" class="form-control" id="edit-keterangan" name="keterangan"
-                                    placeholder="Masukan keterangan">
+                                <label for="nama_golongan">Nama Golongan</label>
+                                <input type="text" class="form-control" id="edit_nama_golongan" name="nama_golongan"
+                                    value="{{ old('nama_golongan') }}" required placeholder="Masukkan nama golongan">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -292,23 +301,25 @@
         <!-- /.modal -->
 
         <!-- Modal Konfirmasi Hapus Jabatan -->
-        <div class="modal fade" id="modalHapusJabatan" tabindex="-1" role="dialog"
-            aria-labelledby="modalHapusJabatanLabel" aria-hidden="true">
+        <div class="modal fade" id="modalHapusJabatangol" tabindex="-1" role="dialog"
+            aria-labelledby="modalHapusJabatangolLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form>
+                <form action="{{ route('admin.goljabatan.destroy', $golongan_jabatan->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
                     <div class="modal-content shadow-none">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalHapusJabatanLabel">Hapus Jabatan Golongan</h5>
+                            <h5 class="modal-title" id="modalHapusJabatangolLabel">Hapus Jabatan Golongan</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Apakah Anda yakin ingin menghapus jabatan Golongan ini?</p>
+                            <p>Apakah Anda yakin ingin menghapus jabatan <strong id="jabatanNama"></strong> ini?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Ya, Hapus</button>
+                            <button type="submit" class="btn btn-danger">Hapus</button>
                         </div>
                     </div>
                 </form>
@@ -338,6 +349,35 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Ketika modal edit ditampilkan
+            $('#modalEditJabatangol').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var jabatanId = button.data('id');
+                var namaJabatan = button.data('nama_jabatan');
+                var namaGolongan = button.data('nama_golongan');
+
+                var modal = $(this);
+                modal.find('#edit_nama_jabatan').val(namaJabatan);
+                modal.find('#edit_nama_golongan').val(namaGolongan);
+
+                // Update action form supaya ke id yang bener
+                modal.find('form').attr('action', '/admin/goljabatan/' + jabatanId);
+            });
+
+            // Ketika modal hapus ditampilkan
+            $('#modalHapusJabatangol').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang mengaktifkan modal
+                var jabatanId = button.data('id'); // Ambil ID
+                var jabatanNama = button.data('nama'); // Ambil Nama
+
+                var modal = $(this);
+                modal.find('#jabatanNama').text(jabatanNama); // Pakai jabatanNama di sini
+                modal.find('#formHapusJabatangol').attr('action', '/admin/goljabatan/' + jabatanId);
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -271,7 +271,6 @@
         <div class="modal fade" id="modalEditJabatan" tabindex="-1" aria-labelledby="modalEditJabatanLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <!-- Form untuk edit data jabatan -->
                 <form method="POST" id="formEditJabatan">
                     @csrf
                     @method('PUT')
@@ -298,7 +297,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
                 </form>

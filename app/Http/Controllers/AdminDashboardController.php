@@ -86,6 +86,7 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.pegawai')->with('success', 'Pegawai berhasil ditambahkan.');
     }
 
+    // Contoler untuk Jabatan
     public function indexJabatan(Request $request)
     {
         $search = $request->input('search');
@@ -136,9 +137,15 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil dihapus.');
     }
 
-    public function indexGolonganJabatan()
+    // Contoler untuk Jabatan Golongan
+    public function indexGolonganJabatan(Request $request)
     {
-        $golonganJabatan = GolonganJabatan::all(); // Ambil semua data golongan jabatan
+        $search = $request->input('search');
+
+        $golonganJabatan = GolonganJabatan::when($search, function ($query, $search) {
+            return $query->where('nama_jabatan', 'like', "%{$search}%");
+        })->paginate(2);
+
         return view('Admin.goljabatan', compact('golonganJabatan'));
     }
 
@@ -155,6 +162,30 @@ class AdminDashboardController extends Controller
         ]);
 
         return redirect()->route('admin.goljabatan')->with('success', 'Golongan Jabatan berhasil ditambahkan.');
+    }
+
+    public function updateGolonganJabatan(Request $request, $id)
+    {
+        $request->validate([
+            'nama_jabatan' => 'required|string|max:255',
+            'nama_golongan' => 'nullable|string',
+        ]);
+
+        $golonganJabatan = GolonganJabatan::findOrFail($id);
+        $golonganJabatan->update([
+            'nama_jabatan' => $request->nama_jabatan,
+            'nama_golongan' => $request->nama_golongan,  // make sure this matches the input name in the form
+        ]);
+
+        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan berhasil diperbarui.');
+    }
+
+    public function destroyGolonganJabatan($id)
+    {
+        $golonganJabatan = GolonganJabatan::findOrFail($id);
+        $golonganJabatan->delete();
+
+        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan berhasil dihapus.');
     }
 
     public function storeSuratMasuk(Request $request)
