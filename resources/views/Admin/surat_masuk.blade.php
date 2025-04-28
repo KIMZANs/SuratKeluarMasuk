@@ -41,7 +41,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <span class="nav-link active">
-                        Welcome, {{ Auth::user()->name }}
+                        Welcome, {{ Auth::user()->nama }}
                     </span>
                 </li>
                 <li class="nav-item">
@@ -109,6 +109,14 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.unitkerja') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-briefcase"></i>
+                                <p>
+                                    Unit Kerja
+                                </p>
+                            </a>
+                        </li>   
                         <li class="nav-item">
                             <a href="{{ route('admin.surat_masuk') }}" class="nav-link active">
                                 <i class="nav-icon fa-solid fa-envelope"></i>

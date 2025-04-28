@@ -24,8 +24,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Route untuk admin dashboard
 Route::prefix('admin')->group(function () {
+    // Route untuk Dashboard Admin
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    // Route untuk jabatan
+    // Route untuk Jabatan
     Route::get('/jabatan', [AdminDashboardController::class, 'indexJabatan'])->name('admin.jabatan');
     Route::post('/jabatan/store', [AdminDashboardController::class, 'storeJabatan'])->name('admin.jabatan.store');
     Route::put('/jabatan/{id}', [AdminDashboardController::class, 'updateJabatan'])->name('admin.jabatan.update');
@@ -35,6 +36,11 @@ Route::prefix('admin')->group(function () {
     Route::post('/goljabatan/store', [AdminDashboardController::class, 'storeGolonganJabatan'])->name('admin.goljabatan.store');
     Route::put('/goljabatan/{id}', [AdminDashboardController::class, 'updateGolonganJabatan'])->name('admin.goljabatan.update');
     Route::delete('/goljabatan/{id}', [AdminDashboardController::class, 'destroyGolonganJabatan'])->name('admin.goljabatan.destroy');
+    // Route untuk Unit Kerja
+    Route::get('/unitkerja', [AdminDashboardController::class, 'indexUnitkerja'])->name('admin.unitkerja');
+    Route::post('/unitkerja/store', [AdminDashboardController::class, 'storeUnitkerja'])->name('admin.unitkerja.store');
+    Route::put('/unitkerja/{id}', [AdminDashboardController::class, 'updateUnitkerja'])->name('admin.unitkerja.update');
+    Route::delete('/unitkerja/{id}', [AdminDashboardController::class, 'destroyUnitkerja'])->name('admin.unitkerja.destroy');
 
     Route::get('/pegawai', [AdminDashboardController::class, 'indexPegawai'])->name('admin.pegawai');
     Route::post('/pegawai/{id}/toggle-status', [AdminDashboardController::class, 'toggleStatus'])->name('admin.pegawai.toggleStatus');

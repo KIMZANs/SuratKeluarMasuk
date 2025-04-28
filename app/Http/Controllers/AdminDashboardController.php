@@ -188,6 +188,18 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan berhasil dihapus.');
     }
 
+    // Contoler untuk Unit Kerja
+    public function indexUnitkerja(Request $request)
+    {
+        //$search = $request->input('search');
+
+        //$unitkerja = UnitKerja::when($search, function ($query, $search) {
+            //return $query->where('nama_unitkerja', 'like', "%{$search}%");
+        //})->paginate(2);
+
+        return view('Admin.unitkerja');//, compact('UnitKerja'));
+    }
+
     public function storeSuratMasuk(Request $request)
     {
         $request->validate([
