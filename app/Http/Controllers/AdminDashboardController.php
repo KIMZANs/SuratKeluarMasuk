@@ -29,16 +29,15 @@ class AdminDashboardController extends Controller
 
     public function indexPegawai(Request $request)
     {
-        $search = $request->input('search');
-
-        // Ambil data pengguna dengan filter pencarian
-        $users = User::where('role', '!=', 'admin')
+        $search = $request->input('search'); // Ambil input pencarian
+        $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
             ->when($search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('nip', 'like', "%{$search}%");
+                return $query->where(function ($query) use ($search) {
+                    $query->where('nama', 'like', "%{$search}%")
+                        ->orWhere('nip', 'like', "%{$search}%");
+                });
             })
-            ->get();
-
+            ->paginate(10);
 
         return view('Admin.pegawai', compact('users'));
     }
@@ -144,7 +143,7 @@ class AdminDashboardController extends Controller
 
         $golonganJabatan = GolonganJabatan::when($search, function ($query, $search) {
             return $query->where('nama_jabatan', 'like', "%{$search}%");
-        })->paginate(2);
+        })->paginate(10);
 
         return view('Admin.goljabatan', compact('golonganJabatan'));
     }
@@ -191,13 +190,52 @@ class AdminDashboardController extends Controller
     // Contoler untuk Unit Kerja
     public function indexUnitkerja(Request $request)
     {
-        //$search = $request->input('search');
+        $search = $request->input('search');
+        
+        $unitKerja = UnitKerja::when($search, function ($query, $search) {
+            return $query->where('nama_unitkerja', 'like', "%{$search}%");
+        })->paginate(2);
 
-        //$unitkerja = UnitKerja::when($search, function ($query, $search) {
-            //return $query->where('nama_unitkerja', 'like', "%{$search}%");
-        //})->paginate(2);
+        return view('Admin.unitkerja', compact('unitKerja'));
+    }
 
-        return view('Admin.unitkerja');//, compact('UnitKerja'));
+    public function storeUnitkerja(Request $request)
+    {
+        $request->validate([
+            'nama_unitkerja' => 'required|string|max:255',
+            'kode_unitkerja' => 'required|string|max:255',
+        ]);
+
+        UnitKerja::create([
+            'nama_unitkerja' => $request->nama_unitkerja,
+            'kode_unitkerja' => $request->kode_unitkerja,
+        ]);
+
+        return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil ditambahkan.');
+    }
+
+    public function updateUnitkerja(Request $request, $id)
+    {
+        $request->validate([
+            'nama_unitkerja' => 'required|string|max:255',
+            'kode_unitkerja' => 'required|string|max:255',
+        ]);
+
+        $unitKerja = UnitKerja::findOrFail($id);
+        $unitKerja->update([
+            'nama_unitkerja' => $request->nama_unitkerja,
+            'kode_unitkerja' => $request->kode_unitkerja,  // make sure this matches the input name in the form
+        ]);
+
+        return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil diperbarui.');
+    }
+
+    public function destroyUnitkerja($id)
+    {
+        $unitKerja = UnitKerja::findOrFail($id);
+        $unitKerja->delete();
+
+        return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil dihapus.');
     }
 
     public function storeSuratMasuk(Request $request)

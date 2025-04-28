@@ -157,48 +157,187 @@
                             </ol>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
 
             <!-- Main content -->
             <section class="content">
-
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12">
-                            <!-- Default box -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Title</h3>
-
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
-                                            title="Collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-tool" data-card-widget="remove"
-                                            title="Remove">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
+                        <div class="col-md-12">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <form method="GET" action="{{ route('admin.unitkerja') }}">
+                                        <input type="text" name="search" class="form-control" placeholder="Search"
+                                            value="{{ request('search') }}">
+                                    </form>
                                 </div>
-                                <div class="card-body">
-                                    Start creating your amazing application!
+                                <div class="col-auto">
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                        data-target="#modalTambahUnitKerja">
+                                        Tambah
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card shadow-none">
+                                <!-- /.card-header -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-head-fixed text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10px">No</th>
+                                                <th>Unit Kerja</th>
+                                                <th>Kode Unit Kerja</th>
+                                                <th style="width: 10px">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse ($unitKerja as $index => $unit_kerja)
+                                                <tr>
+                                                    <td>{{ $unitKerja->firstItem() + $index }}</td>
+                                                    <td>{{ $unit_kerja->nama_unitkerja }}</td>
+                                                    <td>{{ $unit_kerja->kode_unitkerja }}</td>
+                                                    <td>
+                                                        <!-- Tombol Edit -->
+                                                        <button type="button" class="btn btn-sm btn-primary"
+                                                            data-toggle="modal" data-target="#modalEditUnitKerja"
+                                                            data-id="{{ $unit_kerja->id }}"
+                                                            data-nama_unitkerja="{{ $unit_kerja->nama_unitkerja }}"
+                                                            data-kode_unitkerja="{{ $unit_kerja->kode_unitkerja }}">
+                                                            Edit
+                                                        </button>
+                                                        <!-- Tombol Hapus -->
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-toggle="modal" data-target="#modalHapusUnitKerja"
+                                                            data-id="{{ $unit_kerja->id }}"
+                                                            data-nama_unitkerja="{{ $unit_kerja->nama_unitkerja }}">
+                                                            Hapus
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4" class="text-center">Tidak ada data unit kerja.</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <!-- /.card-body -->
-                                <div class="card-footer">
-                                    Footer
+                                <div class="card-footer clearfix">
+                                    <ul class="pagination pagination-sm m-0 float-right">
+                                        {{ $unitKerja->links('pagination::bootstrap-4') }}
+                                    </ul>
                                 </div>
-                                <!-- /.card-footer-->
                             </div>
                             <!-- /.card -->
                         </div>
+                        <!-- /.card -->
                     </div>
                 </div>
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+
+        <!-- Modal Tambah Unit Kerja -->
+        <div class="modal fade" id="modalTambahUnitKerja" tabindex="-1" role="dialog"
+            aria-labelledby="modalTambahUnitKerjaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form action="{{ route('admin.unitkerja.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-content shadow-none">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTambahUnitKerjaLabel">Tambah Unit Kerja</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nama_unitkerja">Nama Unit Kerja</label>
+                                <input type="text" class="form-control" id="nama_unitkerja" name="nama_unitkerja"
+                                    required placeholder="Masukkan nama unit kerja">
+                            </div>
+                            <div class="form-group">
+                                <label for="kode_unitkerja">Kode Unit Kerja</label>
+                                <input type="text" class="form-control" id="kode_unitkerja" name="kode_unitkerja"
+                                    placeholder="Masukkan kode unit kerja">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal -->
+
+        <!-- Modal Edit Unit Kerja -->
+        <div class="modal fade" id="modalEditUnitKerja" tabindex="-1" aria-labelledby="modalEditUnitKerjaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form method="POST" id="formEditUnitKerja">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-content shadow-none">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditUnitKerjaLabel">Edit Unit Kerja</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="edit_nama_unitkerja">Nama Unit Kerja</label>
+                                <input type="text" class="form-control" id="edit_nama_unitkerja" name="nama_unitkerja"
+                                    required placeholder="Masukkan nama unit kerja">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_kode_unitkerja">Kode Unit Kerja</label>
+                                <input type="text" class="form-control" id="edit_kode_unitkerja" name="kode_unitkerja"
+                                    placeholder="Masukkan kode unit kerja">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal -->
+
+        <!-- Modal Konfirmasi Hapus Unit Kerja -->
+        <div class="modal fade" id="modalHapusUnitKerja" tabindex="-1" role="dialog"
+            aria-labelledby="modalHapusUnitKerjaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form method="POST" id="formHapusUnitKerja">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-content shadow-none">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalHapusUnitKerjaLabel">Hapus Unit Kerja</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin ingin menghapus unit kerja <strong id="unitKerjaNama"></strong> ini?
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal -->
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
@@ -222,6 +361,37 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Ketika modal edit Unit Kerja ditampilkan
+            $('#modalEditUnitKerja').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var unitKerjaId = button.data('id'); // Ambil ID unit kerja
+                var unitKerjaNama = button.data('nama_unitkerja'); // Ambil nama unit kerja
+                var unitKerjaKode = button.data('kode_unitkerja'); // Ambil kode unit kerja
+
+                // Isi data ke dalam modal
+                var modal = $(this);
+                modal.find('#edit_nama_unitkerja').val(unitKerjaNama);
+                modal.find('#edit_kode_unitkerja').val(unitKerjaKode);
+
+                // Perbarui form action dengan ID unit kerja yang benar
+                var form = modal.find('form');
+                form.attr('action', '{{ route("admin.unitkerja.update", ":id") }}'.replace(':id', unitKerjaId));
+            });
+
+            // Ketika modal hapus Unit Kerja ditampilkan
+            $('#modalHapusUnitKerja').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var unitKerjaId = button.data('id'); // Ambil ID unit kerja
+                var unitKerjaNama = button.data('nama_unitkerja'); // Ambil nama unit kerja
+
+                var modal = $(this);
+                modal.find('#unitKerjaNama').text(unitKerjaNama); // Setel nama unit kerja di modal
+                modal.find('form').attr('action', '{{ route("admin.unitkerja.destroy", ":id") }}'.replace(':id', unitKerjaId));
+            });
+        });
+    </script>
 </body>
 
 </html>
