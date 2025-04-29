@@ -29,15 +29,16 @@ class AdminDashboardController extends Controller
 
     public function indexPegawai(Request $request)
     {
-        $search = $request->input('search'); // Ambil input pencarian
-        $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
+        $search = $request->input('search');
+
+        // Ambil data pengguna dengan filter pencarian
+        $users = User::where('role', '!=', 'admin')
             ->when($search, function ($query, $search) {
-                return $query->where(function ($query) use ($search) {
-                    $query->where('nama', 'like', "%{$search}%")
-                          ->orWhere('nip', 'like', "%{$search}%");
-                });
+                return $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('nip', 'like', "%{$search}%");
             })
-            ->paginate(10);
+            ->get();
+
 
         return view('Admin.pegawai', compact('users'));
     }
@@ -109,6 +110,7 @@ class AdminDashboardController extends Controller
             'keterangan' => $request->keterangan,
         ]);
 
+        // Tambahkan flash message
         return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil ditambahkan.');
     }
 
@@ -125,14 +127,23 @@ class AdminDashboardController extends Controller
             'keterangan' => $request->keterangan,
         ]);
 
+        // Tambahkan flash message
         return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil diperbarui.');
     }
 
     public function destroyJabatan($id)
     {
         $jabatan = Jabatan::findOrFail($id);
+
+        // Periksa apakah jabatan masih digunakan oleh pengguna
+        $usersCount = \App\Models\User::where('jabatan', $id)->count();
+        if ($usersCount > 0) {
+            return redirect()->route('admin.jabatan')->with('error', 'Jabatan tidak dapat dihapus karena masih digunakan oleh pengguna.');
+        }
+
         $jabatan->delete();
 
+        // Tambahkan flash message
         return redirect()->route('admin.jabatan')->with('success', 'Jabatan berhasil dihapus.');
     }
 
@@ -160,7 +171,7 @@ class AdminDashboardController extends Controller
             'nama_golongan' => $request->nama_golongan,
         ]);
 
-        return redirect()->route('admin.goljabatan')->with('success', 'Golongan Jabatan berhasil ditambahkan.');
+        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan Jabatan berhasil ditambahkan.');
     }
 
     public function updateGolonganJabatan(Request $request, $id)
@@ -182,9 +193,16 @@ class AdminDashboardController extends Controller
     public function destroyGolonganJabatan($id)
     {
         $golonganJabatan = GolonganJabatan::findOrFail($id);
+
+        // Periksa apakah golongan jabatan masih digunakan oleh pengguna
+        $usersCount = \App\Models\User::where('golongan_jabatan', $id)->count();
+        if ($usersCount > 0) {
+            return redirect()->route('admin.goljabatan')->with('error', 'Jabatan Golongan Jabatan tidak dapat dihapus karena masih digunakan oleh pengguna.');
+        }
+
         $golonganJabatan->delete();
 
-        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan berhasil dihapus.');
+        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan Jabatan berhasil dihapus.');
     }
 
     public function storeSuratMasuk(Request $request)

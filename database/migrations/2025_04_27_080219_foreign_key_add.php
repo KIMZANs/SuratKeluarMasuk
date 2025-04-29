@@ -15,9 +15,9 @@ return new class extends Migration {
         });
         
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('jabatan')->references('id')->on('jabatan')->onDelete('cascade');
-            $table->foreign('golongan_jabatan')->references('id')->on('golongan_jabatan')->onDelete('cascade');
-            $table->foreign('unit_kerja')->references('id')->on('unit_kerja')->onDelete('cascade');
+            $table->foreign('jabatan')->references('id')->on('jabatan')->onDelete('set null');
+            $table->foreign('golongan_jabatan')->references('id')->on('golongan_jabatan')->onDelete('set null');
+            $table->foreign('unit_kerja')->references('id')->on('unit_kerja')->onDelete('set null');
         });
 
         // Insert default admin user

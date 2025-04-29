@@ -275,19 +275,19 @@
                             <label>Nomor Surat</label>
                             <div class="row g-2">
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="000.5" required>
+                                    <input type="text" class="form-control" name="nomor_surat" placeholder="000.5" required>
                                 </div>
                                 <div class="col-auto d-flex align-items-center">
                                     <span>/</span>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="001" required>
+                                    <input type="text" class="form-control" name="nomor_surat" placeholder="001" required>
                                 </div>
                                 <div class="col-auto d-flex align-items-center">
                                     <span>/</span>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="IPDN XX" required>
+                                    <input type="text" class="form-control" name="nomor_surat" placeholder="IPDN XX" required>
                                 </div>
                             </div>
                         </div>
@@ -301,17 +301,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Tujuan</label>
-                            <select class="select2" name="tujuan" style="width: 100%;" required>
-                                <option value="" disabled selected>Pilih Tujuan</option>
-                                <option value="Rektor">Rektor</option>
-                                <option value="Wakil Rektor">Wakil Rektor</option>
-                                <option value="Kepegawaian">Kepegawaian</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label>Tembusan</label>
-                            <select class="select2" name="tembusan[]" multiple="multiple" data-placeholder="Pilih tembusan"
+                            <select class="select2" name="tembusan" multiple="multiple" data-placeholder="Pilih tembusan"
                                 style="width: 100%;">
                                 <option value="Kepala Biro Administrasi Akademik dan Perencanaan">Kepala Biro Administrasi Akademik dan Perencanaan</option>
                                 <option value="Kepala Biro Administrasi Umum dan Keuangan">Kepala Biro Administrasi Umum dan Keuangan</option>
@@ -322,7 +313,7 @@
                         <div class="form-group">
                             <label>Tanggal Masuk</label>
                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" name="tanggal_masuk" class="form-control datetimepicker-input" data-target="#reservationdate" required />
+                                <input type="text" name="tangga" class="form-control datetimepicker-input" data-target="#reservationdate" required />
                                 <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>

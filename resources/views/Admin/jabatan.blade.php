@@ -1,3 +1,4 @@
+<!-- filepath: c:\xampp\htdocs\Surat\resources\views\Admin\jabatan.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,11 +165,13 @@
                             <div class="row mb-3">
                                 <div class="col">
                                     <form method="GET" action="{{ route('admin.jabatan') }}">
-                                        <input type="text" name="search" class="form-control" placeholder="Search" value="{{ request('search') }}">
+                                        <input type="text" name="search" class="form-control" placeholder="Search"
+                                               value="{{ request('search') }}">
                                     </form>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambahJabatan">
+                                    <button class="btn btn-primary" data-toggle="modal"
+                                        data-target="#modalTambahJabatan">
                                         Tambah
                                     </button>
                                 </div>
@@ -283,13 +286,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="edit_nama_jabatan">Nama Jabatan</label>
+                                <label for="nama_jabatan">Nama Jabatan</label>
                                 <input type="text" class="form-control" id="edit_nama_jabatan" name="nama_jabatan"
                                     value="{{ old('nama_jabatan', $jabatan->nama_jabatan) }}" required
                                     placeholder="Masukan nama jabatan">
                             </div>
                             <div class="form-group">
-                                <label for="edit_keterangan">Keterangan</label>
+                                <label for="keterangan">Keterangan</label>
                                 <input type="text" class="form-control" id="edit_keterangan" name="keterangan"
                                     value="{{ old('keterangan', $jabatan->keterangan) }}"
                                     placeholder="Masukan keterangan">
@@ -332,6 +335,26 @@
         </div>
         <!-- /.modal -->
 
+        <!-- Modal Flash Message -->
+        <div class="modal fade" id="flashMessageModal" tabindex="-1" role="dialog" aria-labelledby="flashMessageModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content shadow-none">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="flashMessageModalLabel">Informasi</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="flashMessageContent"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0
@@ -356,32 +379,29 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Ketika modal edit ditampilkan
+            @if (session('success'))
+                $('#flashMessageContent').text("{{ session('success') }}");
+                $('#flashMessageModal').modal('show');
+            @elseif (session('error'))
+                $('#flashMessageContent').text("{{ session('error') }}");
+                $('#flashMessageModal').modal('show');
+            @endif
+
+            // Populate Edit Modal with data
             $('#modalEditJabatan').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); // Tombol yang mengaktifkan modal
-                var jabatanId = button.data('id'); // Ambil ID jabatan
-                var jabatanNama = button.data('nama_jabatan'); // Ambil nama jabatan
-                var jabatanKeterangan = button.data('keterangan'); // Ambil keterangan jabatan
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var nama_jabatan = button.data('nama_jabatan');
+                var keterangan = button.data('keterangan');
 
-                // Isi data ke dalam modal
                 var modal = $(this);
-                modal.find('#edit_nama_jabatan').val(jabatanNama);
-                modal.find('#edit_keterangan').val(jabatanKeterangan);
+                modal.find('#edit_nama_jabatan').val(nama_jabatan);
+                modal.find('#edit_keterangan').val(keterangan);
 
-                // Perbarui form action dengan ID jabatan yang benar
-                var form = modal.find('form');
-                form.attr('action', '{{ route("admin.jabatan.update", ":id") }}'.replace(':id', jabatanId));
+                var formAction = "{{ route('admin.jabatan.update', ':id') }}";
+                formAction = formAction.replace(':id', id);
+                modal.find('#formEditJabatan').attr('action', formAction);
             });
-
-            $('#modalHapusJabatan').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) // Tombol yang mengaktifkan modal
-                var jabatanId = button.data('id') // Ambil ID jabatan
-                var jabatanNama = button.data('nama') // Ambil Nama jabatan
-
-                var modal = $(this)
-                modal.find('#jabatanNama').text(jabatanNama) // Setel nama jabatan di modal
-                modal.find('#formHapusJabatan').attr('action', '/admin/jabatan/' + jabatanId) // Setel action form ke URL hapus
-            })
         });
     </script>
 </body>

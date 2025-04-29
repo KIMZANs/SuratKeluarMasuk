@@ -17,9 +17,9 @@ return new class extends Migration {
             $table->string('password');
             $table->enum('role', ['admin', 'pengguna', 'penandatangan', 'reviewer']);
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->unsignedBigInteger('jabatan');
-            $table->unsignedBigInteger('golongan_jabatan');
-            $table->unsignedBigInteger('unit_kerja');
+            $table->unsignedBigInteger('jabatan')->nullable();
+            $table->unsignedBigInteger('golongan_jabatan')->nullable();
+            $table->unsignedBigInteger('unit_kerja')->nullable();
             $table->text('photo')->nullable();
             $table->timestamps();
         });
