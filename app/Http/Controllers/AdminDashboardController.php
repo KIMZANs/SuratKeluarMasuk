@@ -29,18 +29,22 @@ class AdminDashboardController extends Controller
 
     public function indexPegawai(Request $request)
     {
-        $search = $request->input('search');
-
-        // Ambil data pengguna dengan filter pencarian
-        $users = User::where('role', '!=', 'admin')
+        $search = $request->input('search'); // Ambil input pencarian
+        $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
             ->when($search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('nip', 'like', "%{$search}%");
+                return $query->where(function ($query) use ($search) {
+                    $query->where('nama', 'like', "%{$search}%")
+                          ->orWhere('nip', 'like', "%{$search}%");
+                });
             })
             ->get();
 
 
-        return view('Admin.pegawai', compact('users'));
+        $jabatans = Jabatan::all();
+        $golongan_jabatans = GolonganJabatan::all();
+        $unit_kerjas = UnitKerja::all();
+
+        return view('Admin.pegawai', compact('users', 'jabatans', 'golongan_jabatans', 'unit_kerjas'));
     }
 
     public function toggleStatus($id)
@@ -66,9 +70,11 @@ class AdminDashboardController extends Controller
             'tempat_lahir' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email',
-            'role' => 'required|in:pengguna,reviewer,penandatangan',
             'password' => 'required|string|min:8',
-            'unit_kerja' => 'required|in:Unit Kerja 1,Unit Kerja 2,Unit Kerja 3', // Ganti dengan unit kerja yang sesuai
+            'role' => 'required|in:pengguna,reviewer,penandatangan',
+            'jabatan' => 'required|exists:jabatan,id',
+            'golongan_jabatan' => 'required|exists:golongan_jabatan,id',
+            'unit_kerja' => 'required|exists:unit_kerja,id',
         ]);
 
         User::create([
@@ -77,13 +83,59 @@ class AdminDashboardController extends Controller
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'email' => $request->email,
-            'role' => $request->role,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'jabatan' => $request->jabatan,
+            'golongan_jabatan' => $request->golongan_jabatan,
             'unit_kerja' => $request->unit_kerja,
             'status' => 'inactive', // Default status
         ]);
 
         return redirect()->route('admin.pegawai')->with('success', 'Pegawai berhasil ditambahkan.');
+    }
+
+    public function updatePegawai(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'nip' => 'required|string|max:20|unique:users,nip,' . $id,
+            'tempat_lahir' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|in:pengguna,reviewer,penandatangan',
+            'jabatan' => 'required|exists:jabatan,id',
+            'golongan_jabatan' => 'required|exists:golongan_jabatan,id',
+            'unit_kerja' => 'required|exists:unit_kerja,id',
+            'password' => 'nullable|string|min:8', // password bisa dikosongkan kalau tidak diubah
+        ]);
+
+        $user->nama = $request->nama;
+        $user->nip = $request->nip;
+        $user->tempat_lahir = $request->tempat_lahir;
+        $user->tanggal_lahir = $request->tanggal_lahir;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->jabatan = $request->jabatan;
+        $user->golongan_jabatan = $request->golongan_jabatan;
+        $user->unit_kerja = $request->unit_kerja;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.pegawai')->with('success', 'Pegawai berhasil diperbarui.');
+    }
+
+    public function destroyPegawai($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.pegawai')->with('success', 'Pegawai berhasil dihapus.');
     }
 
     // Contoler untuk Jabatan
@@ -203,6 +255,57 @@ class AdminDashboardController extends Controller
         $golonganJabatan->delete();
 
         return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan Jabatan berhasil dihapus.');
+    }
+
+    // Contoler untuk Unit Kerja
+    public function indexUnitkerja(Request $request)
+    {
+        $search = $request->input('search');
+
+        $unitKerja = UnitKerja::when($search, function ($query, $search) {
+            return $query->where('nama_unitkerja', 'like', "%{$search}%");
+        })->paginate(2);
+
+        return view('Admin.unitkerja', compact('unitKerja'));
+    }
+
+    public function storeUnitkerja(Request $request)
+    {
+        $request->validate([
+            'nama_unitkerja' => 'required|string|max:255',
+            'kode_unitkerja' => 'required|string|max:255',
+        ]);
+
+        UnitKerja::create([
+            'nama_unitkerja' => $request->nama_unitkerja,
+            'kode_unitkerja' => $request->kode_unitkerja,
+        ]);
+
+        return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil ditambahkan.');
+    }
+
+    public function updateUnitkerja(Request $request, $id)
+    {
+        $request->validate([
+            'nama_unitkerja' => 'required|string|max:255',
+            'kode_unitkerja' => 'required|string|max:255',
+        ]);
+
+        $unitKerja = UnitKerja::findOrFail($id);
+        $unitKerja->update([
+            'nama_unitkerja' => $request->nama_unitkerja,
+            'kode_unitkerja' => $request->kode_unitkerja,  // make sure this matches the input name in the form
+        ]);
+
+        return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil diperbarui.');
+    }
+
+    public function destroyUnitkerja($id)
+    {
+        $unitKerja = UnitKerja::findOrFail($id);
+        $unitKerja->delete();
+
+        return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil dihapus.');
     }
 
     public function storeSuratMasuk(Request $request)

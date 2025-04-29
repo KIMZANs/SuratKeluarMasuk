@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golongan Jabatan</title>
+    <title>Dashboard Admin</title>
     <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
@@ -63,6 +63,8 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-house"></i>
@@ -75,8 +77,8 @@
                                 <p>Daftar Pegawai</p>
                             </a>
                         </li>
-                        <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
+                        <li class="nav-item menu-close">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-user-plus"></i>
                                 <p>
                                     Daftar jabatan
@@ -92,14 +94,14 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('admin.goljabatan') }}" class="nav-link">
-                                        <i class="fa-regular fa-circle-dot"></i>
+                                        <i class="fa-regular fa-circle"></i>
                                         <p>Jabatan Golongan</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.unitkerja') }}" class="nav-link">
+                            <a href="{{ route('admin.unitkerja') }}" class="nav-link active">
                                 <i class="nav-icon fa-solid fa-briefcase"></i>
                                 <p>
                                     Unit Kerja
@@ -146,16 +148,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Jabatan Golongan</h1>
+                            <h1>Unit Kerja</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-                                </li>
-                                <li class="breadcrumb-item active">Daftar Jabatan</li>
-                                </li>
-                                <li class="breadcrumb-item active">Jabatan Golongan</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                                <li class="breadcrumb-item active">Unit Kerja</li>
                             </ol>
                         </div>
                     </div>
@@ -169,14 +167,14 @@
                         <div class="col-md-12">
                             <div class="row mb-3">
                                 <div class="col">
-                                    <form method="GET" action="{{ route('admin.goljabatan') }}">
+                                    <form method="GET" action="{{ route('admin.unitkerja') }}">
                                         <input type="text" name="search" class="form-control" placeholder="Search"
                                             value="{{ request('search') }}">
                                     </form>
                                 </div>
                                 <div class="col-auto">
                                     <button class="btn btn-primary" data-toggle="modal"
-                                        data-target="#modalTambahJabatangol">
+                                        data-target="#modalTambahUnitKerja">
                                         Tambah
                                     </button>
                                 </div>
@@ -188,37 +186,38 @@
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px">No</th>
-                                                <th>Jabatan</th>
-                                                <th>Golongan</th>
+                                                <th>Unit Kerja</th>
+                                                <th>Kode Unit Kerja</th>
                                                 <th style="width: 10px">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($golonganJabatan as $index => $golongan_jabatan)
+                                            @forelse ($unitKerja as $index => $unit_kerja)
                                                 <tr>
-                                                    <td>{{ $golonganJabatan->firstItem() + $index }}</td>
-                                                    <td>{{ $golongan_jabatan->nama_jabatan }}</td>
-                                                    <td>{{ $golongan_jabatan->nama_golongan }}</td>
+                                                    <td>{{ $unitKerja->firstItem() + $index }}</td>
+                                                    <td>{{ $unit_kerja->nama_unitkerja }}</td>
+                                                    <td>{{ $unit_kerja->kode_unitkerja }}</td>
                                                     <td>
+                                                        <!-- Tombol Edit -->
                                                         <button type="button" class="btn btn-sm btn-primary"
-                                                            data-toggle="modal" data-target="#modalEditJabatangol"
-                                                            data-id="{{ $golongan_jabatan->id }}"
-                                                            data-nama_jabatan="{{ $golongan_jabatan->nama_jabatan }}"
-                                                            data-nama_golongan="{{ $golongan_jabatan->nama_golongan }}">
+                                                            data-toggle="modal" data-target="#modalEditUnitKerja"
+                                                            data-id="{{ $unit_kerja->id }}"
+                                                            data-nama_unitkerja="{{ $unit_kerja->nama_unitkerja }}"
+                                                            data-kode_unitkerja="{{ $unit_kerja->kode_unitkerja }}">
                                                             Edit
                                                         </button>
+                                                        <!-- Tombol Hapus -->
                                                         <button type="button" class="btn btn-sm btn-danger"
-                                                            data-toggle="modal" data-target="#modalHapusJabatangol"
-                                                            data-id="{{ $golongan_jabatan->id }}"
-                                                            data-nama="{{ $golongan_jabatan->nama_jabatan }}">
-                                                            Delete
+                                                            data-toggle="modal" data-target="#modalHapusUnitKerja"
+                                                            data-id="{{ $unit_kerja->id }}"
+                                                            data-nama_unitkerja="{{ $unit_kerja->nama_unitkerja }}">
+                                                            Hapus
                                                         </button>
                                                     </td>
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="4" class="text-center">Tidak ada data yang
-                                                        ditemukan</td>
+                                                    <td colspan="4" class="text-center">Tidak ada data unit kerja.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -227,7 +226,7 @@
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
                                     <ul class="pagination pagination-sm m-0 float-right">
-                                        {{ $golonganJabatan->links('pagination::bootstrap-4') }}
+                                        {{ $unitKerja->links('pagination::bootstrap-4') }}
                                     </ul>
                                 </div>
                             </div>
@@ -241,29 +240,29 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <!-- Modal Tambah Jabatan -->
-        <div class="modal fade" id="modalTambahJabatangol" tabindex="-1" role="dialog"
-            aria-labelledby="modalTambahJabatanLabel" aria-hidden="true">
+        <!-- Modal Tambah Unit Kerja -->
+        <div class="modal fade" id="modalTambahUnitKerja" tabindex="-1" role="dialog"
+            aria-labelledby="modalTambahUnitKerjaLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{{ route('admin.goljabatan.store') }}" method="POST">
+                <form action="{{ route('admin.unitkerja.store') }}" method="POST">
                     @csrf
                     <div class="modal-content shadow-none">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalTambahJabatanLabel">Tambah Jabatan Golongan</h5>
+                            <h5 class="modal-title" id="modalTambahUnitKerjaLabel">Tambah Unit Kerja</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="jabatan">Nama Jabatan</label>
-                                <input type="text" class="form-control" id="jabatan" name="nama_jabatan" required
-                                    placeholder="Masukan nama jabatan">
+                                <label for="nama_unitkerja">Nama Unit Kerja</label>
+                                <input type="text" class="form-control" id="nama_unitkerja" name="nama_unitkerja"
+                                    required placeholder="Masukkan nama unit kerja">
                             </div>
                             <div class="form-group">
-                                <label for="golongan">Golongan</label>
-                                <input type="text" class="form-control" id="golongan" name="nama_golongan" required
-                                    placeholder="Masukan golongan jabatan">
+                                <label for="kode_unitkerja">Kode Unit Kerja</label>
+                                <input type="text" class="form-control" id="kode_unitkerja" name="kode_unitkerja"
+                                    placeholder="Masukkan kode unit kerja">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -276,30 +275,30 @@
         </div>
         <!-- /.modal -->
 
-        <!-- Modal Edit Jabatan -->
-        <div class="modal fade" id="modalEditJabatangol" tabindex="-1" role="dialog"
-            aria-labelledby="modalEditJabatangolLabel" aria-hidden="true">
+        <!-- Modal Edit Unit Kerja -->
+        <div class="modal fade" id="modalEditUnitKerja" tabindex="-1" aria-labelledby="modalEditUnitKerjaLabel"
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form method="POST" id="formEditJabatangol">
+                <form method="POST" id="formEditUnitKerja">
                     @csrf
                     @method('PUT')
                     <div class="modal-content shadow-none">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalEditJabatangolLabel">Edit Jabatan Golongan</h5>
+                            <h5 class="modal-title" id="modalEditUnitKerjaLabel">Edit Unit Kerja</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="nama_jabatan">Nama Jabatan</label>
-                                <input type="text" class="form-control" id="edit_nama_jabatan" name="nama_jabatan"
-                                    value="{{ old('nama_jabatan') }}" required placeholder="Masukkan nama jabatan">
+                                <label for="edit_nama_unitkerja">Nama Unit Kerja</label>
+                                <input type="text" class="form-control" id="edit_nama_unitkerja" name="nama_unitkerja"
+                                    required placeholder="Masukkan nama unit kerja">
                             </div>
                             <div class="form-group">
-                                <label for="nama_golongan">Nama Golongan</label>
-                                <input type="text" class="form-control" id="edit_nama_golongan" name="nama_golongan"
-                                    value="{{ old('nama_golongan') }}" required placeholder="Masukkan nama golongan">
+                                <label for="edit_kode_unitkerja">Kode Unit Kerja</label>
+                                <input type="text" class="form-control" id="edit_kode_unitkerja" name="kode_unitkerja"
+                                    placeholder="Masukkan kode unit kerja">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -312,52 +311,33 @@
         </div>
         <!-- /.modal -->
 
-        <!-- Modal Konfirmasi Hapus Jabatan -->
-        <div class="modal fade" id="modalHapusJabatangol" tabindex="-1" role="dialog"
-            aria-labelledby="modalHapusJabatangolLabel" aria-hidden="true">
+        <!-- Modal Konfirmasi Hapus Unit Kerja -->
+        <div class="modal fade" id="modalHapusUnitKerja" tabindex="-1" role="dialog"
+            aria-labelledby="modalHapusUnitKerjaLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{{ route('admin.goljabatan.destroy', $golongan_jabatan->id) }}" method="POST">
+                <form method="POST" id="formHapusUnitKerja">
                     @csrf
                     @method('DELETE')
                     <div class="modal-content shadow-none">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalHapusJabatangolLabel">Hapus Jabatan Golongan</h5>
+                            <h5 class="modal-title" id="modalHapusUnitKerjaLabel">Hapus Unit Kerja</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Apakah Anda yakin ingin menghapus jabatan <strong id="jabatanNama"></strong> ini?</p>
+                            <p>Apakah Anda yakin ingin menghapus unit kerja <strong id="unitKerjaNama"></strong> ini?
+                            </p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-danger">Hapus</button>
+                            <button type="submit" class="btn btn-danger">Ya, Hapus</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
         <!-- /.modal -->
-
-        <!-- Modal Flash Message -->
-        <div class="modal fade" id="flashMessageModal" tabindex="-1" role="dialog" aria-labelledby="flashMessageModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content shadow-none">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="flashMessageModalLabel">Informasi</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p id="flashMessageContent"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
@@ -383,39 +363,33 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Ketika modal edit ditampilkan
-            $('#modalEditJabatangol').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var jabatanId = button.data('id');
-                var namaJabatan = button.data('nama_jabatan');
-                var namaGolongan = button.data('nama_golongan');
+            // Ketika modal edit Unit Kerja ditampilkan
+            $('#modalEditUnitKerja').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var unitKerjaId = button.data('id'); // Ambil ID unit kerja
+                var unitKerjaNama = button.data('nama_unitkerja'); // Ambil nama unit kerja
+                var unitKerjaKode = button.data('kode_unitkerja'); // Ambil kode unit kerja
 
+                // Isi data ke dalam modal
                 var modal = $(this);
-                modal.find('#edit_nama_jabatan').val(namaJabatan);
-                modal.find('#edit_nama_golongan').val(namaGolongan);
+                modal.find('#edit_nama_unitkerja').val(unitKerjaNama);
+                modal.find('#edit_kode_unitkerja').val(unitKerjaKode);
 
-                // Update action form supaya ke id yang bener
-                modal.find('form').attr('action', '/admin/goljabatan/' + jabatanId);
+                // Perbarui form action dengan ID unit kerja yang benar
+                var form = modal.find('form');
+                form.attr('action', '{{ route("admin.unitkerja.update", ":id") }}'.replace(':id', unitKerjaId));
             });
 
-            // Ketika modal hapus ditampilkan
-            $('#modalHapusJabatangol').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); // Tombol yang mengaktifkan modal
-                var jabatanId = button.data('id'); // Ambil ID
-                var jabatanNama = button.data('nama'); // Ambil Nama
+            // Ketika modal hapus Unit Kerja ditampilkan
+            $('#modalHapusUnitKerja').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var unitKerjaId = button.data('id'); // Ambil ID unit kerja
+                var unitKerjaNama = button.data('nama_unitkerja'); // Ambil nama unit kerja
 
                 var modal = $(this);
-                modal.find('#jabatanNama').text(jabatanNama); // Pakai jabatanNama di sini
-                modal.find('#formHapusJabatangol').attr('action', '/admin/goljabatan/' + jabatanId);
+                modal.find('#unitKerjaNama').text(unitKerjaNama); // Setel nama unit kerja di modal
+                modal.find('form').attr('action', '{{ route("admin.unitkerja.destroy", ":id") }}'.replace(':id', unitKerjaId));
             });
-
-            @if (session('success'))
-                $('#flashMessageContent').text("{{ session('success') }}");
-                $('#flashMessageModal').modal('show');
-            @elseif (session('error'))
-                $('#flashMessageContent').text("{{ session('error') }}");
-                $('#flashMessageModal').modal('show');
-            @endif
         });
     </script>
 </body>

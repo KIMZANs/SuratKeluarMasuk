@@ -1,197 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #343a40;
-            color: white;
-        }
-        .sidebar .nav-link {
-            color: white;
-            transition: background-color 0.3s;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #495057;
-        }
-        .sidebar .nav-link.active {
-            background-color: #007bff;
-            color: white;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .card-header {
-            font-weight: bold;
-        }
-        .navbar {
-            background-color: #343a40;
-            color: white;
-        }
-        .navbar .navbar-brand {
-            color: white;
-        }
-    </style>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Bootstrap (Letakkan ini sebelum AdminLTE jika tidak ingin menimpa font AdminLTE) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
-<body>
-    <div class="container-fluid">
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <div class="container-fluid">
-                <div class="ms-auto d-flex align-items-center">
-                    <!-- Menampilkan nama pengguna -->
-                    <span class="navbar-text me-3">Selamat Datang, {{ Auth::user()->name }}</span>
-                    <!-- Logout Button -->
-                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('pengguna.dashboard') }}" class="nav-link">Home</a>
+                </li>
+            </ul>
+            <!-- Right navbar -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="nav-link active">
+                        Welcome, {{ Auth::user()->nama }}
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none">
                         @csrf
-                        <button type="submit" class="btn btn-danger btn-sm">Logout</button>
                     </form>
-                </div>
-            </div>
+                </li>
+            </ul>
         </nav>
+        <!-- /.navbar -->
 
-        <div class="row">
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- IPDN Logo -->
+            <a class="brand-link">
+                <img src="{{ asset('storage/assets/Logo_IPDN.png') }}" alt="Logo IPDN" class="brand-image img-circle"
+                    width="150" height="150">
+                <span class="brand-text font-weight-light">Arsip Surat</span>
+            </a>
+
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                <div class="position-sticky pt-3">
-                    <h4 class="text-center py-3">Pengguna Panel</h4>
-                    <ul class="nav flex-column">
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('pengguna/dashboard') ? 'active' : '' }}" href="{{ route('pengguna.dashboard') }}">
-                                <i class="bi bi-house-door"></i> Dashboard
+                            <a href="{{ route('pengguna.dashboard') }}" class="nav-link active">
+                                <i class="nav-icon fa-solid fa-house"></i>
+                                <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pengguna.surat_masuk') }}">
-                                <i class="bi bi-envelope-arrow-down"></i> Surat Masuk
+                            <a href="{{ route('pengguna.surat_masuk') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-envelope"></i>
+                                <p>
+                                    Surat Masuk
+                                    <span class="right badge badge-danger">New</span>
+                                </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pengguna.surat_keluar') }}">
-                                <i class="bi bi-envelope-arrow-up"></i> Surat Keluar
+                            <a href="{{ route('pengguna.surat_keluar') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-envelope"></i>
+                                <p>
+                                    Surat Keluar
+                                    <span class="badge badge-info right">2</span>
+                                </p>
                             </a>
                         </li>
-
-                        <!-- Garis Pembatas -->
-                        <hr class="text-white">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pengguna.pengaturan') }}">
-                                <i class="bi bi-gear"></i> Setting
+                            <a href="{{ route('akun.edit', Auth::user()->id) }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-gear"></i>
+                                <p>
+                                    Setting
+                                </p>
                             </a>
                         </li>
                     </ul>
-                </div>
-            </nav>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
 
-            <!-- Main Content Dashboard -->
-            <main class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="container mt-5">
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+
+                    <!-- Modal Success -->
                     @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="card card-success shadow-none">
+                            <div class="card-header">
+                                <h3 class="card-title m-2">{{ session('success') }}</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool m-0" data-card-widget="remove"><i
+                                            class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     @endif
-                    <h1 class="text-center mb-4">Dashboard Admin</h1>
-                    <div class="row">
-                        <!-- Surat Masuk -->
-                        <div class="col-md-6">
-                            <div class="card shadow-sm">
-                                <div class="card-header bg-success text-white">
-                                    Arsip Surat Masuk
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Judul Surat</th>
-                                                <th>Tanggal</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Surat Undangan</td>
-                                                <td>2025-04-15</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-info">Lihat</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Surat Pemberitahuan</td>
-                                                <td>2025-04-14</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-info">Lihat</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- /.modal-success -->
 
-                        <!-- Surat Keluar -->
-                        <div class="col-md-6">
-                            <div class="card shadow-sm">
-                                <div class="card-header bg-danger text-white">
-                                    Arsip Surat Keluar
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Judul Surat</th>
-                                                <th>Tanggal</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Surat Permohonan</td>
-                                                <td>2025-04-13</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-info">Lihat</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Surat Pengantar</td>
-                                                <td>2025-04-12</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-info">Lihat</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Dashboard Pengguna</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="{{ route('pengguna.dashboard') }}">Dashboard</a></li>
+                                <li class="breadcrumb-item active">Pengguna</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
-            </main>
-        </div>
-    </div>
+            </div>
+            <!-- /.content-header -->
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Dashboard Statistik -->
+                    <div class="row">
+                        <!-- /.ini bisa diisi -->
+                    </div>
+                </div>
+            </section>
+            <!-- /.main-content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 3.2.0
+            </div>
+            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+            reserved.
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </body>
+
 </html>

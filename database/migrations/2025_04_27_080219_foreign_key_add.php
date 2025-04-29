@@ -37,6 +37,22 @@ return new class extends Migration {
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        DB::table('users')->insert([
+            'nama' => 'Cau',
+            'nip' => '123456789',
+            'tempat_lahir' => 'Bandung',
+            'tanggal_lahir' => '1990-01-01',
+            'email' => 'cau@gmail.com',
+            'password' => Hash::make('cau123'),
+            'role' => 'pengguna',
+            'status' => 'active',
+            'jabatan' => '1',
+            'golongan_jabatan' => '1',
+            'unit_kerja' => '1',
+            'photo' => 'assets/Logo_IPDN.png',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     public function down(): void
