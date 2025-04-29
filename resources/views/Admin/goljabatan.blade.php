@@ -217,7 +217,8 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="4" class="text-center">Tidak ada data jabatan.</td>
+                                                    <td colspan="4" class="text-center">Tidak ada data yang
+                                                        ditemukan</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>

@@ -41,10 +41,13 @@ Route::prefix('admin')->group(function () {
     Route::post('/unitkerja/store', [AdminDashboardController::class, 'storeUnitkerja'])->name('admin.unitkerja.store');
     Route::put('/unitkerja/{id}', [AdminDashboardController::class, 'updateUnitkerja'])->name('admin.unitkerja.update');
     Route::delete('/unitkerja/{id}', [AdminDashboardController::class, 'destroyUnitkerja'])->name('admin.unitkerja.destroy');
-
+    // Route untuk Pengguna
     Route::get('/pegawai', [AdminDashboardController::class, 'indexPegawai'])->name('admin.pegawai');
     Route::post('/pegawai/{id}/toggle-status', [AdminDashboardController::class, 'toggleStatus'])->name('admin.pegawai.toggleStatus');
     Route::post('/pegawai/store', [AdminDashboardController::class, 'storePegawai'])->name('admin.pegawai.store');
+    Route::put('/pegawai/{id}', [AdminDashboardController::class, 'updatePegawai'])->name('admin.pegawai.update');
+    Route::delete('/pegawai/{id}', [AdminDashboardController::class, 'destroyPegawai'])->name('admin.pegawai.destroy');
+
     Route::get('/surat_masuk', [AdminDashboardController::class, 'indexSurat_masuk'])->name('admin.surat_masuk');
     Route::post('/admin/surat_masuk', [AdminDashboardController::class, 'storeSuratMasuk'])->name('admin.surat_masuk.store');
     Route::get('/surat_keluar', [AdminDashboardController::class, 'indexSurat_keluar'])->name('admin.surat_keluar');
