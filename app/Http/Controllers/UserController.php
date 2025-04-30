@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -36,16 +37,20 @@ class UserController extends Controller
 
         // Validasi input dari form
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'nip' => 'required|string|max:255|unique:users,nip,' . $id, // Pastikan NIP unik kecuali untuk pengguna ini
+            'tempat_lahir' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email,' . $id, // Pastikan email unik kecuali untuk pengguna ini
             'password' => 'nullable|min:8', // Password opsional, minimal 8 karakter jika diisi
         ]);
 
         // Update data pengguna
-        $user->name = $request->name;
-        $user->email = $request->email;
+        $user->nama = $request->nama;
         $user->nip = $request->nip;
+        $user->tempat_lahir = $request->tempat_lahir;
+        $user->tanggal_lahir = $request->tanggal_lahir;
+        $user->email = $request->email;
 
         // Jika password diisi, maka update password
         if ($request->filled('password')) {
@@ -81,5 +86,17 @@ class UserController extends Controller
 
         // Redirect kembali ke halaman daftar pegawai dengan pesan sukses
         return redirect()->route('admin.pegawai')->with('success', 'Pengguna berhasil dihapus.');
+    }
+
+    public function getProvinsi()
+    {
+        // Ambil data dari API
+        $response = Http::get('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
+
+        // Ubah ke array
+        $provinsi = $response->json();
+
+        // Kirim ke view
+        return view('wilayah.provinsi', compact('provinsi'));
     }
 }

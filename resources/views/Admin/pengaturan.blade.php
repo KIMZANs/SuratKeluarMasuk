@@ -5,19 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Akun</title>
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- AdminLTE -->
+    <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <!-- Bootstrap (Letakkan ini sebelum AdminLTE jika tidak ingin menimpa font AdminLTE) -->
+    <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <!-- Tempus Dominus Bootstrap 4 -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
-
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <!-- Select2 Bootstrap4 Theme -->
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -189,9 +188,10 @@
                                                 @endif
                                                 <div class="mt-2">
                                                     <label for="photo" class="form-label d-block">Photo Profil</label>
-                                                    <div class="btn btn-light btn-file">
+                                                    <div class="btn btn-light btn-file disabled"
+                                                        style="pointer-events: none; opacity: 0.5;">
                                                         <i class="fas fa-paperclip"></i> Upload Photo
-                                                        <input type="file" name="photo" id="photo">
+                                                        <input type="file" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -210,86 +210,18 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Tempat Lahir</label>
-                                                            <select class="form-control select2" name="tempat_lahir"
-                                                                style="width: 100%;">
-                                                                <option value="Bandung" selected>Bandung</option>
-                                                                <option value="Jakarta">Jakarta</option>
-                                                                <option value="Cirebon">Cirebon</option>
-                                                                <option value="Surabaya">Surabaya</option>
-                                                                <option value="Medan">Medan</option>
-                                                                <option value="Semarang">Semarang</option>
-                                                                <option value="Yogyakarta">Yogyakarta</option>
-                                                                <option value="Makassar">Makassar</option>
-                                                                <option value="Denpasar">Denpasar</option>
-                                                                <option value="Palembang">Palembang</option>
-                                                                <option value="Bandar Lampung">Bandar Lampung</option>
-                                                                <option value="Pontianak">Pontianak</option>
-                                                                <option value="Balikpapan">Balikpapan</option>
-                                                                <option value="Banjarmasin">Banjarmasin</option>
-                                                                <option value="Pekanbaru">Pekanbaru</option>
-                                                                <option value="Manado">Manado</option>
-                                                                <option value="Padang">Padang</option>
-                                                                <option value="Batam">Batam</option>
-                                                                <option value="Bogor">Bogor</option>
-                                                                <option value="Malang">Malang</option>
-                                                                <option value="Samarinda">Samarinda</option>
-                                                                <option value="Mataram">Mataram</option>
-                                                                <option value="Kupang">Kupang</option>
-                                                                <option value="Jayapura">Jayapura</option>
-                                                                <option value="Banda Aceh">Banda Aceh</option>
-                                                                <option value="Sibolga">Sibolga</option>
-                                                                <option value="Tebing Tinggi">Tebing Tinggi</option>
-                                                                <option value="Pematangsiantar">Pematangsiantar</option>
-                                                                <option value="Tanjungbalai">Tanjungbalai</option>
-                                                                <option value="Padang Panjang">Padang Panjang</option>
-                                                                <option value="Bukittinggi">Bukittinggi</option>
-                                                                <option value="Pagar Alam">Pagar Alam</option>
-                                                                <option value="Lubuklinggau">Lubuklinggau</option>
-                                                                <option value="Metro">Metro</option>
-                                                                <option value="Pangkalpinang">Pangkalpinang</option>
-                                                                <option value="Tanjungpinang">Tanjungpinang</option>
-                                                                <option value="Serang">Serang</option>
-                                                                <option value="Tangerang">Tangerang</option>
-                                                                <option value="Depok">Depok</option>
-                                                                <option value="Bekasi">Bekasi</option>
-                                                                <option value="Cimahi">Cimahi</option>
-                                                                <option value="Tasikmalaya">Tasikmalaya</option>
-                                                                <option value="Magelang">Magelang</option>
-                                                                <option value="Surakarta">Surakarta</option>
-                                                                <option value="Salatiga">Salatiga</option>
-                                                                <option value="Madiun">Madiun</option>
-                                                                <option value="Blitar">Blitar</option>
-                                                                <option value="Pasuruan">Pasuruan</option>
-                                                                <option value="Probolinggo">Probolinggo</option>
-                                                                <option value="Kediri">Kediri</option>
-                                                                <option value="Batu">Batu</option>
-                                                                <option value="Kendari">Kendari</option>
-                                                                <option value="Gorontalo">Gorontalo</option>
-                                                                <option value="Ambon">Ambon</option>
-                                                                <option value="Ternate">Ternate</option>
-                                                                <option value="Tidore">Tidore</option>
-                                                                <option value="Sofifi">Sofifi</option>
-                                                                <option value="Sorong">Sorong</option>
-                                                                <option value="Nusantara">Nusantara</option>
+                                                            <select id="edit-tempat_lahir" name="tempat_lahir"
+                                                                class="form-control select2" required>
+                                                                <option value="" disabled selected>Pilih Tempat Lahir
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Tanggal Lahir</label>
-                                                            <div class="input-group date" id="reservationdate"
-                                                                data-target-input="nearest">
-                                                                <input type="text"
-                                                                    class="form-control datetimepicker-input"
-                                                                    data-target="#reservationdate"
-                                                                    name="tanggal_lahir" />
-                                                                <div class="input-group-append"
-                                                                    data-target="#reservationdate"
-                                                                    data-toggle="datetimepicker">
-                                                                    <div class="input-group-text"><i
-                                                                            class="fa fa-calendar"></i></div>
-                                                                </div>
-                                                            </div>
+                                                            <input type="date" name="tanggal_lahir"
+                                                                id="edit-tanggal_lahir" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -337,27 +269,45 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Moment.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Tempus Dominus -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- AdminLTE -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- DateFunction -->
     <script>
-        $(function () {
-            $('#reservationdate').datetimepicker({
-                format: 'DD MMMM YYYY',
-                locale: 'id'
+        $(document).ready(function () {
+            let selectedTempatLahir = "{{ $user->tempat_lahir }}"; // dari backend
+
+            // Ambil semua kota dari semua provinsi
+            $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (provinces) {
+                let total = provinces.length;
+                let count = 0;
+
+                provinces.forEach(function (prov) {
+                    $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${prov.id}.json`, function (regencies) {
+                        regencies.forEach(function (city) {
+                            let selected = (city.name === selectedTempatLahir) ? 'selected' : '';
+                            $('#edit-tempat_lahir').append(`<option value="${city.name}" ${selected}>${city.name}</option>`);
+                        });
+
+                        count++;
+                        if (count === total) {
+                            $('#edit-tempat_lahir').select2({
+                                theme: 'bootstrap4',
+                            }).trigger('change');
+                        }
+                    });
+                });
             });
+
+            // Isi tanggal lahir otomatis
+            $('#edit-tanggal_lahir').val("{{ $user->tanggal_lahir }}");
         });
-
     </script>
-
 </body>
 
 </html>

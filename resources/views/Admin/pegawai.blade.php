@@ -293,67 +293,9 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>Tempat Lahir</label>
-                                    <select name="tempat_lahir" class="form-control select2-add" required>
+                                    <select id="tempat-lahir" name="tempat_lahir" class="form-control select2-add"
+                                        required>
                                         <option value="" disabled selected>Pilih Tempat Lahir</option>
-                                        <option value="Bandung">Bandung</option>
-                                        <option value="Jakarta">Jakarta</option>
-                                        <option value="Cirebon">Cirebon</option>
-                                        <option value="Surabaya">Surabaya</option>
-                                        <option value="Medan">Medan</option>
-                                        <option value="Semarang">Semarang</option>
-                                        <option value="Yogyakarta">Yogyakarta</option>
-                                        <option value="Makassar">Makassar</option>
-                                        <option value="Denpasar">Denpasar</option>
-                                        <option value="Palembang">Palembang</option>
-                                        <option value="Bandar Lampung">Bandar Lampung</option>
-                                        <option value="Pontianak">Pontianak</option>
-                                        <option value="Balikpapan">Balikpapan</option>
-                                        <option value="Banjarmasin">Banjarmasin</option>
-                                        <option value="Pekanbaru">Pekanbaru</option>
-                                        <option value="Manado">Manado</option>
-                                        <option value="Padang">Padang</option>
-                                        <option value="Batam">Batam</option>
-                                        <option value="Bogor">Bogor</option>
-                                        <option value="Malang">Malang</option>
-                                        <option value="Samarinda">Samarinda</option>
-                                        <option value="Mataram">Mataram</option>
-                                        <option value="Kupang">Kupang</option>
-                                        <option value="Jayapura">Jayapura</option>
-                                        <option value="Banda Aceh">Banda Aceh</option>
-                                        <option value="Sibolga">Sibolga</option>
-                                        <option value="Tebing Tinggi">Tebing Tinggi</option>
-                                        <option value="Pematangsiantar">Pematangsiantar</option>
-                                        <option value="Tanjungbalai">Tanjungbalai</option>
-                                        <option value="Padang Panjang">Padang Panjang</option>
-                                        <option value="Bukittinggi">Bukittinggi</option>
-                                        <option value="Pagar Alam">Pagar Alam</option>
-                                        <option value="Lubuklinggau">Lubuklinggau</option>
-                                        <option value="Metro">Metro</option>
-                                        <option value="Pangkalpinang">Pangkalpinang</option>
-                                        <option value="Tanjungpinang">Tanjungpinang</option>
-                                        <option value="Serang">Serang</option>
-                                        <option value="Tangerang">Tangerang</option>
-                                        <option value="Depok">Depok</option>
-                                        <option value="Bekasi">Bekasi</option>
-                                        <option value="Cimahi">Cimahi</option>
-                                        <option value="Tasikmalaya">Tasikmalaya</option>
-                                        <option value="Magelang">Magelang</option>
-                                        <option value="Surakarta">Surakarta</option>
-                                        <option value="Salatiga">Salatiga</option>
-                                        <option value="Madiun">Madiun</option>
-                                        <option value="Blitar">Blitar</option>
-                                        <option value="Pasuruan">Pasuruan</option>
-                                        <option value="Probolinggo">Probolinggo</option>
-                                        <option value="Kediri">Kediri</option>
-                                        <option value="Batu">Batu</option>
-                                        <option value="Kendari">Kendari</option>
-                                        <option value="Gorontalo">Gorontalo</option>
-                                        <option value="Ambon">Ambon</option>
-                                        <option value="Ternate">Ternate</option>
-                                        <option value="Tidore">Tidore</option>
-                                        <option value="Sofifi">Sofifi</option>
-                                        <option value="Sorong">Sorong</option>
-                                        <option value="Nusantara">Nusantara</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
@@ -453,68 +395,9 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label>Tempat Lahir</label>
-                                    <label>Tempat Lahir</label>
-                                    <select name="tempat_lahir" id="edit-tempat_lahir" class="form-control select2-edit" required>
+                                    <select id="edit-tempat_lahir" name="tempat_lahir" class="form-control select2-edit"
+                                        required>
                                         <option value="" disabled selected>Pilih Tempat Lahir</option>
-                                        <option value="Bandung">Bandung</option>
-                                        <option value="Jakarta">Jakarta</option>
-                                        <option value="Cirebon">Cirebon</option>
-                                        <option value="Surabaya">Surabaya</option>
-                                        <option value="Medan">Medan</option>
-                                        <option value="Semarang">Semarang</option>
-                                        <option value="Yogyakarta">Yogyakarta</option>
-                                        <option value="Makassar">Makassar</option>
-                                        <option value="Denpasar">Denpasar</option>
-                                        <option value="Palembang">Palembang</option>
-                                        <option value="Bandar Lampung">Bandar Lampung</option>
-                                        <option value="Pontianak">Pontianak</option>
-                                        <option value="Balikpapan">Balikpapan</option>
-                                        <option value="Banjarmasin">Banjarmasin</option>
-                                        <option value="Pekanbaru">Pekanbaru</option>
-                                        <option value="Manado">Manado</option>
-                                        <option value="Padang">Padang</option>
-                                        <option value="Batam">Batam</option>
-                                        <option value="Bogor">Bogor</option>
-                                        <option value="Malang">Malang</option>
-                                        <option value="Samarinda">Samarinda</option>
-                                        <option value="Mataram">Mataram</option>
-                                        <option value="Kupang">Kupang</option>
-                                        <option value="Jayapura">Jayapura</option>
-                                        <option value="Banda Aceh">Banda Aceh</option>
-                                        <option value="Sibolga">Sibolga</option>
-                                        <option value="Tebing Tinggi">Tebing Tinggi</option>
-                                        <option value="Pematangsiantar">Pematangsiantar</option>
-                                        <option value="Tanjungbalai">Tanjungbalai</option>
-                                        <option value="Padang Panjang">Padang Panjang</option>
-                                        <option value="Bukittinggi">Bukittinggi</option>
-                                        <option value="Pagar Alam">Pagar Alam</option>
-                                        <option value="Lubuklinggau">Lubuklinggau</option>
-                                        <option value="Metro">Metro</option>
-                                        <option value="Pangkalpinang">Pangkalpinang</option>
-                                        <option value="Tanjungpinang">Tanjungpinang</option>
-                                        <option value="Serang">Serang</option>
-                                        <option value="Tangerang">Tangerang</option>
-                                        <option value="Depok">Depok</option>
-                                        <option value="Bekasi">Bekasi</option>
-                                        <option value="Cimahi">Cimahi</option>
-                                        <option value="Tasikmalaya">Tasikmalaya</option>
-                                        <option value="Magelang">Magelang</option>
-                                        <option value="Surakarta">Surakarta</option>
-                                        <option value="Salatiga">Salatiga</option>
-                                        <option value="Madiun">Madiun</option>
-                                        <option value="Blitar">Blitar</option>
-                                        <option value="Pasuruan">Pasuruan</option>
-                                        <option value="Probolinggo">Probolinggo</option>
-                                        <option value="Kediri">Kediri</option>
-                                        <option value="Batu">Batu</option>
-                                        <option value="Kendari">Kendari</option>
-                                        <option value="Gorontalo">Gorontalo</option>
-                                        <option value="Ambon">Ambon</option>
-                                        <option value="Ternate">Ternate</option>
-                                        <option value="Tidore">Tidore</option>
-                                        <option value="Sofifi">Sofifi</option>
-                                        <option value="Sorong">Sorong</option>
-                                        <option value="Nusantara">Nusantara</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
@@ -731,6 +614,25 @@
 
                 // Show the modal
                 $('#modalDeletePegawai').modal('show');
+            });
+
+            // Load kota dari API EMSIFA dan isi ke dropdown
+            $.getJSON("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json", function (provinsi) {
+                provinsi.forEach(function (prov) {
+                    $.getJSON(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${prov.id}.json`, function (kota) {
+                        kota.forEach(function (item) {
+                            // Tambah ke "Tambah Pegawai"
+                            $('#tempat-lahir').append(`<option value="${item.name}">${item.name}</option>`);
+
+                            // Tambah ke "Edit Pegawai"
+                            $('#edit-tempat_lahir').append(`<option value="${item.name}">${item.name}</option>`);
+                        });
+
+                        // Trigger Select2 update
+                        $('#tempat-lahir').trigger('change');
+                        $('#edit-tempat_lahir').trigger('change');
+                    });
+                });
             });
         });
     </script>
