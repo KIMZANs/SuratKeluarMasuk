@@ -70,24 +70,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Menghapus pengguna dari database.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy($id)
-    {
-        // Temukan pengguna berdasarkan ID, jika tidak ditemukan akan memunculkan 404
-        $user = User::findOrFail($id);
-
-        // Hapus pengguna dari database
-        $user->delete();
-
-        // Redirect kembali ke halaman daftar pegawai dengan pesan sukses
-        return redirect()->route('admin.pegawai')->with('success', 'Pengguna berhasil dihapus.');
-    }
-
     public function getProvinsi()
     {
         // Ambil data dari API
