@@ -111,7 +111,6 @@
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Masuk
-                                    <span class="right badge badge-danger">New</span>
                                 </p>
                             </a>
                         </li>
@@ -120,7 +119,6 @@
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Keluar
-                                    <span class="badge badge-info right">2</span>
                                 </p>
                             </a>
                         </li>

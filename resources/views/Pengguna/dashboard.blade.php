@@ -145,7 +145,24 @@
                 <div class="container-fluid">
                     <!-- Dashboard Statistik -->
                     <div class="row">
-                        <!-- /.ini bisa diisi -->
+                        <div class="col-md-6 col-sm-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-success"><i class="far fa-solid fa-envelope"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Surat Masuk</span>
+                                    <span class="info-box-number">{{ $totalSuratMasuk }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-danger"><i class="far fa-solid fa-envelope"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Surat Keluar</span>
+                                    <span class="info-box-number">{{ $totalSuratKeluar }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
