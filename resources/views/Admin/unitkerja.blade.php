@@ -339,6 +339,26 @@
         </div>
         <!-- /.modal -->
 
+        <!-- Modal Flash Message -->
+<div class="modal fade" id="flashMessageModal" tabindex="-1" role="dialog" aria-labelledby="flashMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content shadow-none">
+            <div class="modal-header">
+                <h5 class="modal-title" id="flashMessageModalLabel">Informasi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="flashMessageContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.2.0
@@ -363,6 +383,15 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
     <script>
         $(document).ready(function () {
+
+            // Menampilkan flash message jika ada
+            @if (session('success'))
+            $('#flashMessageContent').text("{{ session('success') }}");
+            $('#flashMessageModal').modal('show');
+        @elseif (session('error'))
+            $('#flashMessageContent').text("{{ session('error') }}");
+            $('#flashMessageModal').modal('show');
+        @endif
             // Ketika modal edit Unit Kerja ditampilkan
             $('#modalEditUnitKerja').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget); // Tombol yang memicu modal

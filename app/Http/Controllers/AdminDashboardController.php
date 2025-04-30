@@ -22,7 +22,6 @@ class AdminDashboardController extends Controller
         $totalSuratMasuk = SuratMasuk::count();
         $totalSuratKeluar = SuratKeluar::count();
 
-
         // Kirim data ke view
         return view('Admin.dashboard', compact('pegawaiActive', 'pegawaiInactive', 'totalSuratMasuk', 'totalSuratKeluar'));
     }
@@ -30,15 +29,14 @@ class AdminDashboardController extends Controller
     public function indexPegawai(Request $request)
     {
         $search = $request->input('search'); // Ambil input pencarian
+
         $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
             ->when($search, function ($query, $search) {
-                return $query->where(function ($query) use ($search) {
-                    $query->where('nama', 'like', "%{$search}%")
-                          ->orWhere('nip', 'like', "%{$search}%");
-                });
+                return $query->where('nama', 'like', "%{$search}%")
+                             ->orWhere('nip', 'like', "%{$search}%")
+                             ->orWhere('email', 'like', "%{$search}%");
             })
-            ->get();
-
+            ->paginate(10); // Gunakan paginate() untuk mendukung pagination
 
         $jabatans = Jabatan::all();
         $golongan_jabatans = GolonganJabatan::all();
@@ -223,7 +221,7 @@ class AdminDashboardController extends Controller
             'nama_golongan' => $request->nama_golongan,
         ]);
 
-        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan Jabatan berhasil ditambahkan.');
+        return redirect()->route('admin.goljabatan')->with('success', 'Jabatan Golongan berhasil ditambahkan.');
     }
 
     public function updateGolonganJabatan(Request $request, $id)
@@ -249,7 +247,7 @@ class AdminDashboardController extends Controller
         // Periksa apakah golongan jabatan masih digunakan oleh pengguna
         $usersCount = \App\Models\User::where('golongan_jabatan', $id)->count();
         if ($usersCount > 0) {
-            return redirect()->route('admin.goljabatan')->with('error', 'Jabatan Golongan Jabatan tidak dapat dihapus karena masih digunakan oleh pengguna.');
+            return redirect()->route('admin.goljabatan')->with('error', 'Jabatan Golongan tidak dapat dihapus karena masih digunakan oleh pengguna.');
         }
 
         $golonganJabatan->delete();
