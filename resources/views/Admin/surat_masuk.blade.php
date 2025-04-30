@@ -19,9 +19,6 @@
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <!-- include summernote css/js -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
-    <!-- Tempus Dominus Bootstrap 4 -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" />
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -116,7 +113,7 @@
                                     Unit Kerja
                                 </p>
                             </a>
-                        </li>   
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.surat_masuk') }}" class="nav-link active">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
@@ -202,26 +199,38 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($suratmasuk as $index => $surat)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $surat->nomor_surat }}</td>
-                                                <td>{{ $surat->pengirim }}</td>
-                                                <td>{{ $surat->tembusan }}</td>
-                                                <td>{{ $surat->tanggal }}</td>
-                                                <td>{{ $surat->sifat }}</td>
-                                                <td>{{ $surat->perihal }}</td>
-                                                <td>
-                                                    <button class="btn btn-info btn-sm" onclick="lihatDetail({{ $surat->id }})">Lihat Detail</button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm" onclick="editSurat({{ $surat->id }})">Edit</button>
-                                                    <form action="{{ route('admin.surat_masuk.delete', $surat->id) }}" method="POST" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?')">Hapus</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $surat->nomor_surat }}</td>
+                                                    <td>{{ $surat->pengirim }}</td>
+                                                    <td>
+                                                        @if($surat->tembusans->count() > 0)
+                                                            @foreach($surat->tembusans as $index => $tembusan)
+                                                                {{ $tembusan->jabatan->nama_jabatan }}@if($index < $surat->tembusans->count() - 1), @endif
+                                                            @endforeach
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $surat->tanggal }}</td>
+                                                    <td>{{ $surat->sifat }}</td>
+                                                    <td>{!! $surat->perihal !!}</td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-sm"
+                                                            onclick="lihatDetail({{ $surat->id }})">Lihat Detail</button>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary btn-sm"
+                                                            onclick="editSurat({{ $surat->id }})">Edit</button>
+                                                        <form action="{{ route('admin.surat_masuk.delete', $surat->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?')">Hapus</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -229,11 +238,7 @@
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
                                     <ul class="pagination pagination-sm m-0 float-right">
-                                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                        {{ $suratmasuk->links('pagination::bootstrap-4') }}
                                     </ul>
                                 </div>
                             </div>
@@ -262,7 +267,7 @@
     </div>
     <!-- ./wrapper -->
 
-    <!-- Modal Tambah Jabatan -->
+    <!-- Modal Tambah Surat Masuk -->
     <div class="modal fade" id="modalTambahSuratMasuk" tabindex="-1" role="dialog"
         aria-labelledby="modalTambahSuratMasukLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -276,23 +281,43 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <!-- Tampilkan error jika ada -->
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+
                         <div class="form-group">
                             <label>Nomor Surat</label>
                             <div class="row g-2">
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat" placeholder="000.5" required>
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="001"
+                                        required value="{{ old('nomor_surat.0') }}">
                                 </div>
                                 <div class="col-auto d-flex align-items-center">
                                     <span>/</span>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat" placeholder="001" required>
+                                    <input type="text" class="form-control" name="nomor_surat[]" placeholder="001"
+                                        required value="{{ old('nomor_surat.1') }}">
                                 </div>
                                 <div class="col-auto d-flex align-items-center">
                                     <span>/</span>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="nomor_surat" placeholder="IPDN XX" required>
+                                    <select class="form-control" name="unit_kerja_id" required>
+                                        <option value="" disabled selected>UKXX</option>
+                                        @foreach ($unitKerja as $unit)
+                                            <option value="{{ $unit->id }}" {{ old('unit_kerja_id') == $unit->id ? 'selected' : '' }}>
+                                                {{ $unit->kode_unitkerja }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -300,42 +325,39 @@
                             <label>Pengirim</label>
                             <select class="select2" name="pengirim" style="width: 100%;" required>
                                 <option value="" disabled selected>Pilih Pengirim</option>
-                                <option value="Aria">Aria</option>
-                                <option value="Aji">Aji</option>
-                                <option value="Riri">Riri</option>
+                                @foreach ($jabatans as $jabatan)
+                                    <option value="{{ $jabatan->id }}" {{ old('pengirim') == $jabatan->id ? 'selected' : '' }}>
+                                        {{ $jabatan->nama_jabatan }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Tembusan</label>
-                            <select class="select2" name="tembusan" multiple="multiple" data-placeholder="Pilih tembusan"
-                                style="width: 100%;">
-                                <option value="Kepala Biro Administrasi Akademik dan Perencanaan">Kepala Biro Administrasi Akademik dan Perencanaan</option>
-                                <option value="Kepala Biro Administrasi Umum dan Keuangan">Kepala Biro Administrasi Umum dan Keuangan</option>
-                                <option value="Kepala Bagian Perencanaan">Kepala Bagian Perencanaan</option>
-                                <option value="Kepala Bagian Umum dan Perlengkapan">Kepala Bagian Umum dan Perlengkapan</option>
+                            <select class="select2" name="tembusan[]" multiple="multiple"
+                                data-placeholder="Pilih tembusan" style="width: 100%;" required>
+                                @foreach ($jabatans as $jabatan)
+                                    <option value="{{ $jabatan->id }}" 
+                                        {{ is_array(old('tembusan')) && in_array($jabatan->id, old('tembusan')) ? 'selected' : '' }}>
+                                        {{ $jabatan->nama_jabatan }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Tanggal Masuk</label>
-                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" name="tangga" class="form-control datetimepicker-input" data-target="#reservationdate" required />
-                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+                            <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal') ?? date('Y-m-d') }}" required>
                         </div>
                         <div class="form-group">
                             <label>Sifat</label>
                             <select class="select2" name="sifat" style="width: 100%;" required>
-                                <option value="Penting">Penting</option>
-                                <option value="Biasa">Biasa</option>
+                                <option value="Penting" {{ old('sifat') == 'Penting' ? 'selected' : '' }}>Penting</option>
+                                <option value="Biasa" {{ old('sifat') == 'Biasa' ? 'selected' : '' }}>Biasa</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="summernote">Perihal</label>
-                            <textarea name="perihal" id="summernote">
-                                 Place <em>some</em> <u>text</u> <strong>here</strong>
-                            </textarea>
+                            <textarea name="perihal" id="summernote" class="form-control">{{ old('perihal') }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -358,20 +380,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <!-- Select2 JS -->
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-    <!-- Tempus Dominus / Datetimepicker -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.39.0/build/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
     <!-- Initialize -->
     <script>
         $(document).ready(function () {
             $('.select2').select2({
                 theme: 'bootstrap4',
-                dropdownParent: $('#modalTambahSuratMasuk') // ✅ ini sesuai ID modal
-            });
-            $('#reservationdate').datetimepicker({
-                format: 'DD MMMM YYYY',
-                locale: 'id'
+                dropdownParent: $('#modalTambahSuratMasuk')
             });
             $('#summernote').summernote()
         });

@@ -10,8 +10,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('surat_masuk', function (Blueprint $table) {
-            $table->foreign('pengirim')->references('id')->on('jabatan')->onDelete('cascade');
-            $table->foreign('tembusan')->references('id')->on('jabatan')->onDelete('cascade');
+            $table->foreign('pengirim')->references('id')->on('jabatan')->onDelete('set null');
         });
         
         Schema::table('users', function (Blueprint $table) {
@@ -65,7 +64,6 @@ return new class extends Migration {
 
         Schema::table('surat_masuk', function (Blueprint $table) {
             $table->dropForeign(['pengirim']);
-            $table->dropForeign(['tembusan']);
         });
     }
 };
