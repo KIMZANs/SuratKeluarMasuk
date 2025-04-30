@@ -77,3 +77,5 @@ Route::prefix('akun')->group(function () {
     Route::put('/{name}', [UserController::class, 'update'])->name('akun.update');
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('akun.destroy');
 });
+
+Route::get('/provinsi', [UserController::class, 'getProvinsi']);
