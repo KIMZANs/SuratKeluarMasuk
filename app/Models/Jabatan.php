@@ -9,6 +9,11 @@ class Jabatan extends Model
 {
     use HasFactory;
 
-    protected $table = 'jabatan'; // Nama tabel
-    protected $fillable = ['nama_jabatan', 'keterangan']; // Kolom yang dapat diisi
+    protected $table = 'jabatan';
+    protected $fillable = ['nama_jabatan', 'keterangan'];
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
+    }
 }

@@ -8,9 +8,9 @@ use App\Models\GolonganJabatan;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
 use App\Models\UnitKerja;
+use App\Models\TembusanSuratMasuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class AdminDashboardController extends Controller
 {
@@ -33,8 +33,8 @@ class AdminDashboardController extends Controller
         $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
             ->when($search, function ($query, $search) {
                 return $query->where('nama', 'like', "%{$search}%")
-                             ->orWhere('nip', 'like', "%{$search}%")
-                             ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('nip', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             })
             ->paginate(10); // Gunakan paginate() untuk mendukung pagination
 
@@ -143,7 +143,7 @@ class AdminDashboardController extends Controller
 
         $jabatans = Jabatan::when($search, function ($query, $search) {
             return $query->where('nama_jabatan', 'like', "%{$search}%");
-        })->paginate(2);
+        })->paginate(10);
 
         return view('Admin.jabatan', compact('jabatans'));
     }
@@ -306,42 +306,70 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil dihapus.');
     }
 
-    public function storeSuratMasuk(Request $request)
-    {
-        $request->validate([
-            'nomor_surat' => 'required|array',
-            'nomor_surat.*' => 'required|string',
-            'pengirim' => 'required|string',
-            'tembusan' => 'nullable|array',
-            'tanggal' => 'required|date',
-            'sifat' => 'required|string',
-            'perihal' => 'required|string',
-        ]);
-
-        $nomorSurat = implode('/', $request->nomor_surat);
-
-        // Convert the date to the correct format
-        $formattedDate = Carbon::createFromFormat('d F Y', $request->tanggal_masuk)->format('Y-m-d');
-
-        SuratMasuk::create([
-            'nomor_surat' => $nomorSurat,
-            'pengirim' => $request->pengirim,
-            'tembusan' => $request->tembusan ? implode(', ', $request->tembusan) : null,
-            'tanggal' => $formattedDate,
-            'sifat' => $request->sifat,
-            'perihal' => $request->perihal,
-        ]);
-
-        return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil ditambahkan.');
-    }
-
     public function indexsurat_masuk()
     {
         // Ambil semua data dari tabel surat_masuk
-        $suratmasuk = \App\Models\SuratMasuk::all();
+        $suratmasuk = SuratMasuk::latest()->paginate(10);
+        $jabatans = Jabatan::all();
+        $unitKerja = UnitKerja::all();
 
         // Logika untuk dashboard surat masuk
-        return view('Admin.surat_masuk', compact('suratmasuk'));
+        return view('Admin.surat_masuk', compact('suratmasuk', 'jabatans', 'unitKerja'));
+    }
+
+    public function storeSuratMasuk(Request $request)
+    {
+        // Debug untuk melihat data yang dikirim
+        // dd($request->all());
+
+        // Validasi input
+        $request->validate([
+            'nomor_surat' => 'required|array|min:2',
+            'nomor_surat.*' => 'required|string',
+            'unit_kerja_id' => 'required',
+            'pengirim' => 'required',
+            'tanggal' => 'required|date',
+            'sifat' => 'required|string',
+            'perihal' => 'required|string',
+            'tembusan' => 'required|array',
+            'tembusan.*' => 'required',
+        ]);
+
+        try {
+            // Ambil data unit kerja untuk mendapatkan kode
+            $unitKerja = UnitKerja::find($request->unit_kerja_id);
+            $kodeUnitKerja = $unitKerja ? $unitKerja->kode_unitkerja : '';
+
+            // Gabungkan nomor surat dengan kode unit kerja
+            $nomorSuratParts = $request->nomor_surat;
+            $nomorSuratParts[] = $kodeUnitKerja;
+            $nomorSurat = implode('/', $nomorSuratParts);
+
+            // Menyimpan SuratMasuk
+            $suratMasuk = SuratMasuk::create([
+                'nomor_surat' => $nomorSurat,
+                'pengirim' => $request->pengirim,
+                'tanggal' => $request->tanggal,
+                'sifat' => $request->sifat,
+                'perihal' => $request->perihal,
+            ]);
+
+            // Menyimpan data Tembusan ke tabel tembusan_suratmasuk
+            if (is_array($request->tembusan)) {
+                foreach ($request->tembusan as $jabatanId) {
+                    TembusanSuratMasuk::create([
+                        'surat_masuk_id' => $suratMasuk->id,
+                        'jabatan_id' => $jabatanId,
+                        'unit_kerja_id' => $request->unit_kerja_id,
+                    ]);
+                }
+            }
+
+            return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk beserta tembusan berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            // Tangkap error dan kembalikan dengan pesan
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function showSuratMasuk($id)

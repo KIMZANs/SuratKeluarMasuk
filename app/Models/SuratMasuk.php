@@ -9,13 +9,17 @@ class SuratMasuk extends Model
 {
     use HasFactory;
 
-    protected $table = 'surat_masuk'; // Nama tabel di database
+    protected $table = 'surat_masuk';
     protected $fillable = [
         'nomor_surat',
         'pengirim',
-        'tembusan',
         'tanggal',
         'sifat',
         'perihal',
     ];
+
+    public function tembusans()
+    {
+        return $this->hasMany(TembusanSuratMasuk::class, 'surat_masuk_id');
+    }
 }
