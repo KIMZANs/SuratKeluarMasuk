@@ -11,4 +11,9 @@ class UnitKerja extends Model
 
     protected $table = 'unit_kerja'; // Nama tabel
     protected $fillable = ['nama_unitkerja', 'kode_unitkerja']; // Kolom yang dapat diisi
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

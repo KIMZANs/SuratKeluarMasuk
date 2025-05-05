@@ -206,7 +206,8 @@
                                                     <td>
                                                         @if($surat->tembusans->count() > 0)
                                                             @foreach($surat->tembusans as $index => $tembusan)
-                                                                {{ $tembusan->jabatan->nama_jabatan }}@if($index < $surat->tembusans->count() - 1), @endif
+                                                                {{ $tembusan->jabatan->nama_jabatan }}
+                                                                @if($index < $surat->tembusans->count() - 1), @endif
                                                             @endforeach
                                                         @else
                                                             <span class="text-muted">-</span>
@@ -220,15 +221,14 @@
                                                             onclick="lihatDetail({{ $surat->id }})">Lihat Detail</button>
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-primary btn-sm"
-                                                            onclick="editSurat({{ $surat->id }})">Edit</button>
-                                                        <form action="{{ route('admin.surat_masuk.delete', $surat->id) }}"
-                                                            method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus surat ini?')">Hapus</button>
-                                                        </form>
+                                                        <button type="button" class="btn btn-sm btn-warning"
+                                                            data-toggle="modal" data-target="#modalEditSuratMasuk"
+                                                            data-suratmasuk="{{ json_encode($surat) }}">
+                                                            Edit
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            data-toggle="modal" data-target="#modalDeleteSurat"
+                                                            data-surat-id="{{ $surat->id }}">Hapus</button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -291,7 +291,6 @@
                             </ul>
                         </div>
                         @endif
-
                         <div class="form-group">
                             <label>Nomor Surat</label>
                             <div class="row g-2">
@@ -311,9 +310,10 @@
                                 </div>
                                 <div class="col">
                                     <select class="form-control" name="unit_kerja_id" required>
-                                        <option value="" disabled selected>UKXX</option>
+                                        <option value="" disabled>UKXX</option>
                                         @foreach ($unitKerja as $unit)
-                                            <option value="{{ $unit->id }}" {{ old('unit_kerja_id') == $unit->id ? 'selected' : '' }}>
+                                            <option value="{{ $unit->id }}" 
+                                                {{ (old('unit_kerja_id') == $unit->id || (empty(old('unit_kerja_id')) && Auth::user()->unit_kerja_id == $unit->id))? 'selected' : '' }}>
                                                 {{ $unit->kode_unitkerja }}
                                             </option>
                                         @endforeach
@@ -369,6 +369,131 @@
         </div>
     </div>
     <!-- /.modal -->
+     
+    <!-- Modal Edit Surat Masuk -->
+    <div class="modal fade" id="modalEditSuratMasuk" tabindex="-1" role="dialog"
+        aria-labelledby="modalEditSuratMasukLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form id="formEditSuratMasuk" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-content shadow-none">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditSuratMasukLabel">Edit Surat Masuk</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <div class="form-group">
+                            <label>Nomor Surat</label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="text" class="form-control" name="nomor_surat[]"
+                                        id="edit_nomor_surat_part_1" placeholder="001" required>
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <span>/</span>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" name="nomor_surat[]"
+                                        id="edit_nomor_surat_part_2" placeholder="001" required>
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <span>/</span>
+                                </div>
+                                <div class="col">
+                                    <select class="form-control" name="unit_kerja_id" required>
+                                        <option value="" disabled>UKXX</option>
+                                        @foreach ($unitKerja as $unit)
+                                            <option value="{{ $unit->id }}">{{ $unit->kode_unitkerja }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pengirim</label>
+                            <select class="select2-modal-edit" name="pengirim" id="edit_pengirim" style="width: 100%;"
+                                required>
+                                <option value="" disabled selected>Pilih Pengirim</option>
+                                @foreach ($jabatans as $jabatan)
+                                    <option value="{{ $jabatan->id }}">{{ $jabatan->nama_jabatan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tembusan</label>
+                            <select class="select2-modal-edit" name="tembusan[]" id="edit_tembusan" multiple="multiple"
+                                data-placeholder="Pilih tembusan" style="width: 100%;">
+                                @foreach ($jabatans as $jabatan)
+                                    <option value="{{ $jabatan->id }}">{{ $jabatan->nama_jabatan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Masuk</label>
+                            <input type="date" name="tanggal" id="edit_tanggal" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Sifat</label>
+                            <select class="select2-modal-edit" name="sifat" id="edit_sifat" style="width: 100%;"
+                                required>
+                                <option value="Penting">Penting</option>
+                                <option value="Biasa">Biasa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_summernote">Perihal</label>
+                            <textarea name="perihal" id="edit_summernote" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+    <!-- Modal Konfirmasi Hapus -->
+    <div class="modal fade" id="modalDeleteSurat" tabindex="-1" role="dialog" aria-labelledby="modalDeleteSuratLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content shadow-none">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDeleteSuratLabel">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus surat ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteSuratForm" action="" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -385,11 +510,173 @@
     <!-- Initialize -->
     <script>
         $(document).ready(function () {
-            $('.select2').select2({
+            // Event listener untuk Modal Edit saat ditampilkan
+            $('#modalEditSuratMasuk').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var suratMasuk = button.data('suratmasuk'); // Data surat masuk dari tombol
+
+                var modal = $(this);
+
+                // Atur form action
+                modal.find('#formEditSuratMasuk').attr('action', "{{ route('admin.surat_masuk.update', '') }}/" + suratMasuk.id);
+
+                // Atur nomor surat
+                var nomorSuratParts = suratMasuk.nomor_surat.split('/');
+                modal.find('#edit_nomor_surat_part_1').val(nomorSuratParts[0] || '');
+                modal.find('#edit_nomor_surat_part_2').val(nomorSuratParts[1] || '');
+
+                // Atur unit kerja
+                var selectUnitKerja = modal.find('#edit_unit_kerja_id');
+                if (!selectUnitKerja.hasClass('select2-hidden-accessible')) {
+                    selectUnitKerja.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                selectUnitKerja.val(suratMasuk.unit_kerja_id).trigger('change'); // Set nilai unit kerja
+
+                // Atur pengirim
+                var selectPengirim = modal.find('#edit_pengirim');
+                if (!selectPengirim.hasClass('select2-hidden-accessible')) {
+                    selectPengirim.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                selectPengirim.val(suratMasuk.pengirim).trigger('change'); // Set nilai pengirim
+
+                // Atur tanggal
+                modal.find('#edit_tanggal').val(suratMasuk.tanggal);
+
+                // Atur sifat
+                var selectSifat = modal.find('#edit_sifat');
+                if (!selectSifat.hasClass('select2-hidden-accessible')) {
+                    selectSifat.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                selectSifat.val(suratMasuk.sifat).trigger('change'); // Set nilai sifat
+
+                // Atur perihal
+                modal.find('#edit_summernote').summernote('code', suratMasuk.perihal);
+
+                // Atur tembusan
+                var selectTembusan = modal.find('#edit_tembusan');
+                if (!selectTembusan.hasClass('select2-hidden-accessible')) {
+                    selectTembusan.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                var tembusanIds = suratMasuk.tembusans.map(function (tembusan) {
+                    return tembusan.jabatan_id;
+                });
+                selectTembusan.val(tembusanIds).trigger('change'); // Set nilai tembusan
+            });
+
+            // Hancurkan Summernote saat modal edit ditutup
+            $('#modalEditSuratMasuk').on('hidden.bs.modal', function () {
+                var summernoteEdit = $(this).find('#edit_summernote');
+                if (summernoteEdit.length && summernoteEdit.hasClass('note-editor')) {
+                    summernoteEdit.summernote('destroy');
+                }
+            });
+
+            // Inisialisasi Select2 dan Summernote untuk Modal Tambah
+            $('#modalTambahSuratMasuk .select2').select2({
                 theme: 'bootstrap4',
                 dropdownParent: $('#modalTambahSuratMasuk')
             });
-            $('#summernote').summernote()
+            $('#modalTambahSuratMasuk #summernote').summernote({
+                height: 150,
+            });
+
+            // Event listener untuk Modal Edit saat ditampilkan
+            $('#modalEditSuratMasuk').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var suratMasuk = button.data('suratmasuk'); // Data surat masuk dari tombol
+
+                var modal = $(this);
+
+                // Atur form action
+                modal.find('#formEditSuratMasuk').attr('action', "{{ route('admin.surat_masuk.update', '') }}/" + suratMasuk.id);
+
+                // Atur nomor surat
+                var nomorSuratParts = suratMasuk.nomor_surat.split('/');
+                modal.find('#edit_nomor_surat_part_1').val(nomorSuratParts[0] || '');
+                modal.find('#edit_nomor_surat_part_2').val(nomorSuratParts[1] || '');
+
+                // Atur unit kerja tanpa Select2
+                modal.find('#edit_unit_kerja_id').val(suratMasuk.unit_kerja_id); // Set nilai unit kerja
+
+                // Atur pengirim
+                var selectPengirim = modal.find('#edit_pengirim');
+                if (!selectPengirim.hasClass('select2-hidden-accessible')) {
+                    selectPengirim.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                selectPengirim.val(suratMasuk.pengirim).trigger('change'); // Set nilai pengirim
+
+                // Atur tanggal
+                modal.find('#edit_tanggal').val(suratMasuk.tanggal);
+
+                // Atur sifat
+                var selectSifat = modal.find('#edit_sifat');
+                if (!selectSifat.hasClass('select2-hidden-accessible')) {
+                    selectSifat.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                selectSifat.val(suratMasuk.sifat).trigger('change'); // Set nilai sifat
+
+                // Atur perihal
+                modal.find('#edit_summernote').summernote('code', suratMasuk.perihal);
+
+                // Atur tembusan
+                var selectTembusan = modal.find('#edit_tembusan');
+                if (!selectTembusan.hasClass('select2-hidden-accessible')) {
+                    selectTembusan.select2({
+                        theme: 'bootstrap4',
+                        dropdownParent: modal
+                    });
+                }
+                var tembusanIds = suratMasuk.tembusans.map(function (tembusan) {
+                    return tembusan.jabatan_id;
+                });
+                selectTembusan.val(tembusanIds).trigger('change'); // Set nilai tembusan
+            });
+
+            // Hancurkan Summernote saat modal edit ditutup
+            $('#modalEditSuratMasuk').on('hidden.bs.modal', function () {
+                var summernoteEdit = $(this).find('#edit_summernote');
+                if (summernoteEdit.length && summernoteEdit.hasClass('note-editor')) {
+                    summernoteEdit.summernote('destroy');
+                }
+            });
+
+            // Inisialisasi Select2 dan Summernote untuk Modal Tambah
+            $('#modalTambahSuratMasuk .select2').select2({
+                theme: 'bootstrap4',
+                dropdownParent: $('#modalTambahSuratMasuk')
+            });
+            $('#modalTambahSuratMasuk #summernote').summernote({
+                height: 150,
+            });
+
+            // Event listener untuk Modal Hapus saat ditampilkan
+            $('#modalDeleteSurat').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var suratId = button.data('surat-id'); // Mengambil ID surat dari atribut data
+
+                var modal = $(this);
+                var formAction = "{{ route('admin.surat_masuk.destroy', '') }}/" + suratId; // Menentukan URL penghapusan berdasarkan ID surat
+
+                modal.find('#deleteSuratForm').attr('action', formAction); // Atur action form untuk penghapusan surat
+            });
         });
     </script>
 </body>

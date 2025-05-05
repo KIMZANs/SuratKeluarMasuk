@@ -11,6 +11,7 @@ use App\Models\UnitKerja;
 use App\Models\TembusanSuratMasuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
@@ -306,6 +307,7 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.unitkerja')->with('success', 'Unit Kerja berhasil dihapus.');
     }
 
+    // Contoler untuk Surat Masuk
     public function indexsurat_masuk()
     {
         // Ambil semua data dari tabel surat_masuk
@@ -319,9 +321,6 @@ class AdminDashboardController extends Controller
 
     public function storeSuratMasuk(Request $request)
     {
-        // Debug untuk melihat data yang dikirim
-        // dd($request->all());
-
         // Validasi input
         $request->validate([
             'nomor_surat' => 'required|array|min:2',
@@ -380,13 +379,69 @@ class AdminDashboardController extends Controller
 
     public function updateSuratMasuk(Request $request, $id)
     {
-        $surat = SuratMasuk::findOrFail($id);
-        $surat->update($request->all());
+        // Validasi input, sesuaikan dengan kebutuhan Anda
+        $request->validate([
+            'nomor_surat' => 'required|array|min:2',
+            'nomor_surat.*' => 'required|string',
+            'unit_kerja_id' => 'required',
+            'pengirim' => 'required',
+            'tanggal' => 'required|date',
+            'sifat' => 'required|string',
+            'perihal' => 'required|string',
+            'tembusan' => 'nullable|array', // Tembusan bisa tidak diubah
+            'tembusan.*' => 'nullable|exists:jabatan,id', // Pastikan ID jabatan valid
+        ]);
 
-        return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil diperbarui.');
+        try {
+            DB::beginTransaction();
+            // Temukan surat masuk yang akan diupdate
+            $suratMasuk = SuratMasuk::findOrFail($id);
+
+            // Ambil data unit kerja untuk mendapatkan kode (jika diperlukan perubahan unit kerja)
+            $unitKerjaBaru = UnitKerja::find($request->unit_kerja_id);
+            $kodeUnitKerjaBaru = $unitKerjaBaru ? $unitKerjaBaru->kode_unitkerja : '';
+
+            // Gabungkan nomor surat dengan kode unit kerja yang baru (jika ada perubahan unit kerja)
+            $nomorSuratParts = $request->nomor_surat;
+            $nomorSuratParts[] = $kodeUnitKerjaBaru;
+            $nomorSuratBaru = implode('/', $nomorSuratParts);
+
+            // Update data SuratMasuk
+            $suratMasuk->update([
+                'nomor_surat' => $nomorSuratBaru,
+                'pengirim' => $request->pengirim,
+                'tanggal' => $request->tanggal,
+                'sifat' => $request->sifat,
+                'perihal' => $request->perihal,
+            ]);
+
+            // Sinkronisasi data tembusan
+            if ($request->has('tembusan')) {
+                // Hapus semua tembusan terkait dengan surat masuk ini
+                TembusanSuratMasuk::where('surat_masuk_id', $suratMasuk->id)->delete();
+
+                // Tambahkan tembusan yang baru dipilih
+                foreach ($request->tembusan as $jabatanId) {
+                    TembusanSuratMasuk::create([
+                        'surat_masuk_id' => $suratMasuk->id,
+                        'jabatan_id' => $jabatanId,
+                        'unit_kerja_id' => $request->unit_kerja_id, // Gunakan unit kerja yang baru
+                    ]);
+                }
+            } else {
+                // Jika tidak ada tembusan yang dikirimkan saat update, hapus semua tembusan yang ada
+                TembusanSuratMasuk::where('surat_masuk_id', $suratMasuk->id)->delete();
+            }
+
+            DB::commit();
+            return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memperbarui: ' . $e->getMessage())->withInput();
+        }
     }
 
-    public function deleteSuratMasuk($id)
+    public function destroySuratMasuk($id)
     {
         $surat = SuratMasuk::findOrFail($id);
         $surat->delete();
@@ -394,6 +449,7 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil dihapus.');
     }
 
+    // Contoler untuk Surat Keluar
     public function indexsurat_keluar()
     {
         // Ambil semua data dari tabel surat_keluar
