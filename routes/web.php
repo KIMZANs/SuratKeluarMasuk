@@ -1,12 +1,14 @@
 <?php
 // filepath: c:\xampp\htdocs\Surat\routes\web.php
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\PenggunaDashboardController;
 use App\Http\Controllers\PenandatanganDashboardController;
 use App\Http\Controllers\ReviewerDashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\PasswordResetController;
 
 // Halaman utama (login)
 Route::get('/', function () {
@@ -18,6 +20,11 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+
+Route::get('password/reset', [PasswordResetController::class, 'showResetForm'])->name('password.request');
+Route::post('password/email', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+Route::get('password/reset/{token}', [PasswordResetController::class, 'showNewPasswordForm'])->name('password.reset');
+Route::post('password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 
 // Route untuk logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
