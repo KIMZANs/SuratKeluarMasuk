@@ -319,6 +319,30 @@ class AdminDashboardController extends Controller
         return view('Admin.surat_masuk', compact('suratmasuk', 'jabatans', 'unitKerja'));
     }
 
+    public function indexSurat_masuk_tambah()
+    {
+        $suratMasuk = SuratMasuk::all();
+        $jabatans = Jabatan::all();
+        $unitKerja = UnitKerja::all();
+
+        return view('Admin.surat_masuk_tambah', compact('suratMasuk', 'jabatans', 'unitKerja'));
+    }
+
+    public function indexSurat_masuk_edit($id)
+    {
+        $suratMasuk = SuratMasuk::with('tembusans')->findOrFail($id);
+        $jabatans = Jabatan::all();
+        $unitKerja = UnitKerja::all();
+
+        return view('Admin.surat_masuk_edit', compact('suratMasuk', 'jabatans', 'unitKerja'));
+    }
+
+    public function indexSurat_masuk_view($id)
+    {
+        $suratmasuk = SuratMasuk::with(['unitKerja', 'tembusans.jabatan', 'tembusans.unitKerja'])->findOrFail($id);
+        return view('Admin.surat_masuk_view', compact('suratmasuk'));
+    }
+
     public function storeSuratMasuk(Request $request)
     {
         // Validasi input

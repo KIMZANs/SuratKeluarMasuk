@@ -22,4 +22,12 @@ class SuratMasuk extends Model
     {
         return $this->hasMany(TembusanSuratMasuk::class, 'surat_masuk_id');
     }
+    public function unitKerja()
+    {
+        return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
+    }
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
+    }
 }
