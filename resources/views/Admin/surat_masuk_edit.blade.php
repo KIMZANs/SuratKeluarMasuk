@@ -39,7 +39,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <span class="nav-link active">
-                        Welcome, {{ Auth::user()->name }}
+                        Welcome, {{ Auth::user()->nama }}
                     </span>
                 </li>
                 <li class="nav-item">
@@ -108,11 +108,18 @@
                             </ul>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.unitkerja') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-briefcase"></i>
+                                <p>
+                                    Unit Kerja
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.surat_masuk') }}" class="nav-link active">
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Masuk
-                                    <span class="right badge badge-danger">New</span>
                                 </p>
                             </a>
                         </li>
@@ -121,7 +128,6 @@
                                 <i class="nav-icon fa-solid fa-envelope"></i>
                                 <p>
                                     Surat Keluar
-                                    <span class="badge badge-info right">2</span>
                                 </p>
                             </a>
                         </li>
@@ -282,10 +288,12 @@
                 </div>
             </section>
             <!-- /.content -->
-
-
         </div>
         <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2024 Institut Pemerintahan Dalam Negeri</strong>
+        </footer>
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
