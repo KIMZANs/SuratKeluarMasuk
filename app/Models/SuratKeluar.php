@@ -9,19 +9,34 @@ class SuratKeluar extends Model
 {
     use HasFactory;
 
-    // Nama tabel di database
     protected $table = 'surat_keluar';
 
-    // Kolom yang dapat diisi secara massal
     protected $fillable = [
         'nomor_surat',
         'pengirim',
-        'tujuan',
-        'tembusan',
         'tanggal',
         'sifat',
         'perihal',
-        'reviewer',
-        'penandatangan',
+        'isi_surat',
     ];
+
+    public function tembusans()
+    {
+        return $this->hasMany(TembusanSuratKeluar::class, 'surat_keluar_id');
+    }
+
+    public function tujuans()
+    {
+        return $this->hasMany(TujuanSuratKeluar::class, 'surat_keluar_id');
+    }
+
+    public function unitKerja()
+    {
+        return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
+    }
+    
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
+    }
 }

@@ -62,10 +62,16 @@ Route::prefix('admin')->group(function () {
     Route::put('/suratmasuk/{id}', [AdminDashboardController::class, 'updateSuratMasuk'])->name('admin.surat_masuk.update');
     Route::delete('/suratmasuk/{id}', [AdminDashboardController::class, 'destroySuratMasuk'])->name('admin.surat_masuk.destroy');
     Route::get('/suratmasuk/{id}', [AdminDashboardController::class, 'showSuratMasuk'])->name('admin.surat_masuk.show');
-    Route::get('/surat_masuk/view/{id}', [AdminDashboardController::class, 'indexSuratMasukView'])->name('admin.surat_masuk_view');
     Route::get('/surat_masuk/view/{id}', [AdminDashboardController::class, 'indexSurat_masuk_view'])->name('admin.surat_masuk.view');
     // Route untuk Surat Keluar
     Route::get('/surat_keluar', [AdminDashboardController::class, 'indexSurat_keluar'])->name('admin.surat_keluar');
+    Route::get('/surat_keluar/tambah', [AdminDashboardController::class, 'indexSurat_keluar_tambah'])->name('admin.surat_keluar.tambah');
+    Route::post('/surat_keluar/store', [AdminDashboardController::class, 'storeSuratKeluar'])->name('admin.surat_keluar.store');
+    Route::get('/surat_keluar/{id}/edit', [AdminDashboardController::class, 'indexSurat_keluar_edit'])->name('admin.surat_keluar.edit');
+    Route::put('/surat_keluar/{id}', [AdminDashboardController::class, 'updateSuratKeluar'])->name('admin.surat_keluar.update');
+    Route::delete('/surat_keluar/{id}', [AdminDashboardController::class, 'destroySuratKeluar'])->name('admin.surat_keluar.destroy');
+    Route::get('/surat_keluar/{id}', [AdminDashboardController::class, 'showSuratKeluar'])->name('admin.surat_keluar.show');
+    Route::get('/surat_keluar/view/{id}', [AdminDashboardController::class, 'indexSurat_keluar_view'])->name('admin.surat_keluar.view');
 });
 
 // Route untuk pengguna dashboard

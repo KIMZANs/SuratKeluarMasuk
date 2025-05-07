@@ -13,17 +13,13 @@ return new class extends Migration
     {
         Schema::create('surat_keluar', function (Blueprint $table) {
             $table->id();
-            $table->string('nomor_surat')->unique(); // Nomor surat
-            $table->string('pengirim'); // Pengirim surat
-            $table->string('tujuan'); // Tujuan surat
-            $table->string('tembusan'); // Tembusan surat
-            $table->string('tanggal'); // Tanggal surat
-            $table->string('sifat'); // Sifat surat
-            $table->string('perihal'); // Perihal surat
-            $table->string('isi_surat'); // Isi surat
-            $table->enum('reviewer', ['diproses', 'selesai']); // Status surat 
-            $table->enum('penandatangan', ['diproses', 'selesai']); // Status surat
-            $table->timestamps(); // Kolom created_at dan updated_at
+            $table->string('nomor_surat');
+            $table->unsignedBigInteger('pengirim')->nullable();
+            $table->string('tanggal');
+            $table->string('sifat'); 
+            $table->string('perihal');
+            $table->string('isi_surat');
+            $table->timestamps();
         });
     }
 

@@ -14,7 +14,7 @@
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <!-- Select2 Bootstrap4 Theme -->
@@ -153,9 +153,9 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a>
-                                </li>
-                                <li class="breadcrumb-item active">Tambah Surat Masuk</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.surat_masuk') }}">Surat Masuk</a></li>
+                                <li class="breadcrumb-item active">Tambah</li>
                             </ol>
                         </div>
                     </div>
@@ -198,12 +198,11 @@
                                                             <span>/</span>
                                                         </div>
                                                         <div class="col">
-                                                            <select class="form-control" name="unit_kerja_id"
-                                                                required>
-                                                                <option value="" disabled selected>UKXX</option>
+                                                            <select class="form-control select2" name="unit_kerja_id" required>
+                                                                <option value="" disabled>UKXX</option>
                                                                 @foreach ($unitKerja as $unit)
                                                                     <option value="{{ $unit->id }}"
-                                                                        {{ old('unit_kerja_id') == $unit->id ? 'selected' : '' }}>
+                                                                        {{ old('unit_kerja_id', auth()->user()->unit_kerja_id) == $unit->id ? 'selected' : '' }}>
                                                                         {{ $unit->kode_unitkerja }}
                                                                     </option>
                                                                 @endforeach
@@ -213,9 +212,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Pengirim</label>
-                                                    <select class="form-control" name="pengirim" required>
-                                                        <option value="" disabled selected>Pilih Pengirim
-                                                        </option>
+                                                    <select class="form-control select2" name="pengirim" required>
+                                                        <option value="" disabled selected>Pilih pengirim</option>
                                                         @foreach ($jabatans as $jabatan)
                                                             <option value="{{ $jabatan->id }}"
                                                                 {{ old('pengirim') == $jabatan->id ? 'selected' : '' }}>
@@ -239,7 +237,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <!-- Kanan -->
                                             <div class="col-md-6">
                                                 <!-- Tanggal Masuk -->
@@ -248,11 +245,11 @@
                                                     <input type="date" name="tanggal" class="form-control"
                                                         value="{{ old('tanggal') ?? date('Y-m-d') }}" required>
                                                 </div>
-
                                                 <!-- Sifat -->
                                                 <div class="form-group">
                                                     <label>Sifat</label>
-                                                    <select class="form-control" name="sifat" required>
+                                                    <select class="form-control select2" name="sifat" required>
+                                                        <option value="" disabled selected>Pilih sifat</option>
                                                         <option value="Penting"
                                                             {{ old('sifat') == 'Penting' ? 'selected' : '' }}>Penting
                                                         </option>
@@ -263,14 +260,12 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- Full Row: Perihal -->
                                         <div class="form-group">
                                             <label for="summernote">Perihal</label>
                                             <textarea name="perihal" id="summernote" class="form-control">{{ old('perihal') }}</textarea>
                                         </div>
                                     </div>
-
                                     <!-- Card Footer -->
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -300,18 +295,19 @@
         <!-- Select2 JS -->
         <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
         <!-- Summernote -->
-        <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+        <script src="{{ asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
         <!-- Initialize -->
 
         <script>
             $(document).ready(function() {
-                $('.select2').select2();
+                $('.select2').select2({
+                    theme: 'bootstrap4'
+                });
             });
             $('#summernote').summernote({
                 height: 150
             });
         </script>
-
 </body>
 
 </html>

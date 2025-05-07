@@ -14,7 +14,7 @@
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <!-- Select2 Bootstrap4 Theme -->
@@ -152,9 +152,9 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a>
-                                </li>
-                                <li class="breadcrumb-item active">Edit Surat Masuk</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.surat_masuk') }}">Surat Masuk</a></li>
+                                <li class="breadcrumb-item active">Edit</li>
                             </ol>
                         </div>
                     </div>
@@ -169,11 +169,10 @@
                         <div class="col-md-12">
                             <!-- Card -->
                             <div class="card card-primary shadow-none">
-                                <form action="{{ route('admin.surat_masuk.update', $suratMasuk->id) }}"
+                                <form action="{{ route('admin.surat_masuk.update', $suratmasuk->id) }}"
                                     method="POST">
                                     @csrf
                                     @method('PUT')
-
                                     <!-- Form fields -->
                                     <div class="card-body">
                                         <div class="row">
@@ -186,7 +185,7 @@
                                                         <div class="col">
                                                             <input type="text" class="form-control"
                                                                 name="nomor_surat[]" placeholder="001" required
-                                                                value="{{ explode('/', $suratMasuk->nomor_surat)[0] ?? '' }}">
+                                                                value="{{ explode('/', $suratmasuk->nomor_surat)[0] ?? '' }}">
                                                         </div>
                                                         <div class="col-auto d-flex align-items-center">
                                                             <span>/</span>
@@ -194,18 +193,18 @@
                                                         <div class="col">
                                                             <input type="text" class="form-control"
                                                                 name="nomor_surat[]" placeholder="001" required
-                                                                value="{{ explode('/', $suratMasuk->nomor_surat)[1] ?? '' }}">
+                                                                value="{{ explode('/', $suratmasuk->nomor_surat)[1] ?? '' }}">
                                                         </div>
                                                         <div class="col-auto d-flex align-items-center">
                                                             <span>/</span>
                                                         </div>
                                                         <div class="col">
-                                                            <select class="form-control" name="unit_kerja_id"
+                                                            <select class="form-control select2" name="unit_kerja_id"
                                                                 required>
                                                                 <option value="" disabled>UKXX</option>
                                                                 @foreach ($unitKerja as $unit)
                                                                     <option value="{{ $unit->id }}"
-                                                                        {{ $unit->id == $suratMasuk->unit_kerja_id ? 'selected' : '' }}>
+                                                                        {{ $unit->id == $suratmasuk->unit_kerja_id ? 'selected' : '' }}>
                                                                         {{ $unit->kode_unitkerja }}
                                                                     </option>
                                                                 @endforeach
@@ -213,21 +212,19 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <!-- Pengirim -->
                                                 <div class="form-group">
                                                     <label>Pengirim</label>
-                                                    <select class="form-control" name="pengirim" required>
-                                                        <option value="" disabled>Pilih Pengirim</option>
+                                                    <select class="form-control select2" name="pengirim" required>
+                                                        <option value="" disabled>Pilih pengirim</option>
                                                         @foreach ($jabatans as $jabatan)
                                                             <option value="{{ $jabatan->id }}"
-                                                                {{ $jabatan->id == $suratMasuk->pengirim ? 'selected' : '' }}>
+                                                                {{ $jabatan->id == $suratmasuk->pengirim ? 'selected' : '' }}>
                                                                 {{ $jabatan->nama_jabatan }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-
                                                 <!-- Tembusan -->
                                                 <div class="form-group">
                                                     <label>Tembusan</label>
@@ -236,45 +233,42 @@
                                                         required>
                                                         @foreach ($jabatans as $jabatan)
                                                             <option value="{{ $jabatan->id }}"
-                                                                {{ in_array($jabatan->id, $suratMasuk->tembusans->pluck('jabatan_id')->toArray()) ? 'selected' : '' }}>
+                                                                {{ in_array($jabatan->id, $suratmasuk->tembusans->pluck('jabatan_id')->toArray()) ? 'selected' : '' }}>
                                                                 {{ $jabatan->nama_jabatan }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
-
                                             <!-- Kanan -->
                                             <div class="col-md-6">
                                                 <!-- Tanggal Masuk -->
                                                 <div class="form-group">
                                                     <label>Tanggal Masuk</label>
                                                     <input type="date" name="tanggal" class="form-control"
-                                                        value="{{ $suratMasuk->tanggal }}" required>
+                                                        value="{{ $suratmasuk->tanggal }}" required>
                                                 </div>
-
                                                 <!-- Sifat -->
                                                 <div class="form-group">
                                                     <label>Sifat</label>
-                                                    <select class="form-control" name="sifat" required>
+                                                    <select class="form-control select2" name="sifat" required>
+                                                        <option value="" disabled>Pilih sifat</option>
                                                         <option value="Penting"
-                                                            {{ $suratMasuk->sifat == 'Penting' ? 'selected' : '' }}>
+                                                            {{ $suratmasuk->sifat == 'Penting' ? 'selected' : '' }}>
                                                             Penting</option>
                                                         <option value="Biasa"
-                                                            {{ $suratMasuk->sifat == 'Biasa' ? 'selected' : '' }}>Biasa
+                                                            {{ $suratmasuk->sifat == 'Biasa' ? 'selected' : '' }}>Biasa
                                                         </option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- Full Row: Perihal -->
                                         <div class="form-group">
                                             <label for="edit_summernote">Perihal</label>
-                                            <textarea name="perihal" id="edit_summernote" class="form-control">{{ $suratMasuk->perihal }}</textarea>
+                                            <textarea name="perihal" id="edit_summernote" class="form-control" style="height: 150px">{{ $suratmasuk->perihal }}</textarea>
                                         </div>
                                     </div>
-
                                     <!-- Card Footer -->
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -304,18 +298,17 @@
         <!-- Select2 JS -->
         <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
         <!-- Summernote -->
-        <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+        <script src="{{ asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
         <!-- Initialize -->
 
         <script>
             $(document).ready(function() {
-                $('.select2').select2();
+                $('.select2').select2({
+                    theme: 'bootstrap4'
+                });
             });
-            $('#edit_summernote').summernote({
-                height: 150
-            });
+            $('#edit_summernote').summernote()
         </script>
-
 </body>
 
 </html>

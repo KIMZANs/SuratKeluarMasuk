@@ -9,6 +9,8 @@ use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
 use App\Models\UnitKerja;
 use App\Models\TembusanSuratMasuk;
+use App\Models\TembusanSuratKeluar;
+use App\Models\TujuanSuratKeluar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -312,34 +314,32 @@ class AdminDashboardController extends Controller
     {
         // Ambil semua data dari tabel surat_masuk
         $suratmasuk = SuratMasuk::latest()->paginate(10);
-        $jabatans = Jabatan::all();
-        $unitKerja = UnitKerja::all();
 
         // Logika untuk dashboard surat masuk
-        return view('Admin.surat_masuk', compact('suratmasuk', 'jabatans', 'unitKerja'));
+        return view('Admin.surat_masuk', compact('suratmasuk'));
     }
 
     public function indexSurat_masuk_tambah()
     {
-        $suratMasuk = SuratMasuk::all();
         $jabatans = Jabatan::all();
         $unitKerja = UnitKerja::all();
 
-        return view('Admin.surat_masuk_tambah', compact('suratMasuk', 'jabatans', 'unitKerja'));
+        return view('Admin.surat_masuk_tambah', compact('jabatans', 'unitKerja'));
     }
 
     public function indexSurat_masuk_edit($id)
     {
-        $suratMasuk = SuratMasuk::with('tembusans')->findOrFail($id);
+        $suratmasuk = SuratMasuk::with('tembusans')->findOrFail($id);
         $jabatans = Jabatan::all();
         $unitKerja = UnitKerja::all();
 
-        return view('Admin.surat_masuk_edit', compact('suratMasuk', 'jabatans', 'unitKerja'));
+        return view('Admin.surat_masuk_edit', compact('suratmasuk', 'jabatans', 'unitKerja'));
     }
 
     public function indexSurat_masuk_view($id)
     {
         $suratmasuk = SuratMasuk::with(['unitKerja', 'tembusans.jabatan', 'tembusans.unitKerja'])->findOrFail($id);
+
         return view('Admin.surat_masuk_view', compact('suratmasuk'));
     }
 
@@ -468,6 +468,9 @@ class AdminDashboardController extends Controller
     public function destroySuratMasuk($id)
     {
         $surat = SuratMasuk::findOrFail($id);
+
+        TembusanSuratMasuk::where('surat_masuk_id', $surat->id)->delete();
+
         $surat->delete();
 
         return redirect()->route('admin.surat_masuk')->with('success', 'Surat masuk berhasil dihapus.');
@@ -476,10 +479,188 @@ class AdminDashboardController extends Controller
     // Contoler untuk Surat Keluar
     public function indexsurat_keluar()
     {
-        // Ambil semua data dari tabel surat_keluar
-        $suratKeluar = \App\Models\SuratKeluar::all();
+        // Ambil semua data dari tabel surat_masuk
+        $suratkeluar = Suratkeluar::latest()->paginate(10);
 
-        // Kirim data ke view
-        return view('Admin.surat_keluar', compact('suratKeluar'));
+        // Logika untuk dashboard surat masuk
+        return view('Admin.surat_keluar', compact('suratkeluar'));
+    }
+
+    public function indexSurat_keluar_tambah()
+    {
+        $jabatans = Jabatan::all();
+        $unitKerja = UnitKerja::all();
+
+        return view('Admin.surat_keluar_tambah', compact('jabatans', 'unitKerja'));
+    }
+
+    public function indexSurat_keluar_edit($id)
+    {
+        $suratkeluar = SuratKeluar::with(['tembusans', 'tujuans'])->findOrFail($id);
+        $jabatans = Jabatan::all();
+        $unitKerja = UnitKerja::all();
+
+        return view('Admin.surat_keluar_edit', compact('suratkeluar', 'jabatans', 'unitKerja'));
+    }
+
+    public function storeSuratKeluar(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'nomor_surat' => 'required|array|min:2',
+            'nomor_surat.*' => 'required|string',
+            'unit_kerja_id' => 'required|exists:unit_kerja,id',
+            'pengirim' => 'required|exists:jabatan,id',
+            'tanggal' => 'required|date',
+            'sifat' => 'required|string',
+            'perihal' => 'required|string',
+            'isi_surat' => 'required|string',
+            'tembusan' => 'nullable|array',
+            'tembusan.*' => 'nullable|exists:jabatan,id',
+            'tujuan' => 'required|array',
+            'tujuan.*' => 'required|exists:jabatan,id',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Ambil data unit kerja untuk mendapatkan kode
+            $unitKerja = UnitKerja::find($request->unit_kerja_id);
+            $kodeUnitKerja = $unitKerja ? $unitKerja->kode_unitkerja : '';
+
+            // Gabungkan nomor surat dengan kode unit kerja
+            $nomorSuratParts = $request->nomor_surat;
+            $nomorSuratParts[] = $kodeUnitKerja;
+            $nomorSurat = implode('/', $nomorSuratParts);
+
+            // Menyimpan SuratKeluar
+            $suratKeluar = SuratKeluar::create([
+                'nomor_surat' => $nomorSurat,
+                'pengirim' => $request->pengirim,
+                'tanggal' => $request->tanggal,
+                'sifat' => $request->sifat,
+                'perihal' => $request->perihal,
+                'isi_surat' => $request->isi_surat,
+            ]);
+
+            // Menyimpan data Tembusan ke tabel tembusan_suratkeluar
+            if (is_array($request->tembusan)) {
+                foreach ($request->tembusan as $jabatanId) {
+                    if (!empty($jabatanId)) {
+                        TembusanSuratkeluar::create([
+                            'surat_keluar_id' => $suratKeluar->id,
+                            'jabatan_id' => $jabatanId,
+                            'unit_kerja_id' => $request->unit_kerja_id,
+                        ]);
+                    }
+                }
+            }
+
+            // Menyimpan data Tujuan ke tabel tujuan_suratkeluar
+            if (is_array($request->tujuan)) {
+                foreach ($request->tujuan as $jabatanId) {
+                    TujuanSuratKeluar::create([
+                        'surat_keluar_id' => $suratKeluar->id,
+                        'jabatan_id' => $jabatanId,
+                        'unit_kerja_id' => $request->unit_kerja_id,
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.surat_keluar')->with('success', 'Surat keluar beserta tembusan dan tujuan berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Tangkap error dan kembalikan dengan pesan
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    public function showSuratKeluar($id)
+    {
+        $surat = SuratKeluar::findOrFail($id);
+        return response()->json($surat); // Kirim data sebagai JSON untuk modal
+    }
+
+    public function updateSuratKeluar(Request $request, $id)
+    {
+        $request->validate([
+            'nomor_surat' => 'required|array|min:2',
+            'nomor_surat.*' => 'required|string',
+            'unit_kerja_id' => 'required|exists:unit_kerja,id',
+            'pengirim' => 'required|exists:jabatan,id',
+            'tanggal' => 'required|date',
+            'sifat' => 'required|string',
+            'perihal' => 'required|string',
+            'isi_surat' => 'required|string',
+            'tembusan' => 'nullable|array',
+            'tembusan.*' => 'nullable|exists:jabatan,id',
+            'tujuan' => 'required|array',
+            'tujuan.*' => 'required|exists:jabatan,id',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $suratKeluar = SuratKeluar::findOrFail($id);
+
+            $unitKerja = UnitKerja::find($request->unit_kerja_id);
+            $kodeUnitKerja = $unitKerja ? $unitKerja->kode_unitkerja : '';
+
+            $nomorSuratParts = $request->nomor_surat;
+            $nomorSuratParts[] = $kodeUnitKerja;
+            $nomorSurat = implode('/', $nomorSuratParts);
+
+            $suratKeluar->update([
+                'nomor_surat' => $nomorSurat,
+                'pengirim' => $request->pengirim,
+                'tanggal' => $request->tanggal,
+                'sifat' => $request->sifat,
+                'perihal' => $request->perihal,
+                'isi_surat' => $request->isi_surat,
+            ]);
+
+            // Hapus tembusan dan tujuan lama
+            TembusanSuratkeluar::where('surat_keluar_id', $id)->delete();
+            TujuanSuratKeluar::where('surat_keluar_id', $id)->delete();
+
+            // Tambah ulang tembusan
+            if ($request->tembusan) {
+                foreach ($request->tembusan as $jabatanId) {
+                    TembusanSuratkeluar::create([
+                        'surat_keluar_id' => $id,
+                        'jabatan_id' => $jabatanId,
+                        'unit_kerja_id' => $request->unit_kerja_id,
+                    ]);
+                }
+            }
+
+            // Tambah ulang tujuan
+            foreach ($request->tujuan as $jabatanId) {
+                TujuanSuratKeluar::create([
+                    'surat_keluar_id' => $id,
+                    'jabatan_id' => $jabatanId,
+                    'unit_kerja_id' => $request->unit_kerja_id,
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.surat_keluar')->with('success', 'Surat keluar berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengupdate: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    public function destroySuratKeluar($id)
+    {
+        $surat = SuratKeluar::findOrFail($id);
+
+        TembusanSuratkeluar::where('surat_keluar_id', $surat->id)->delete();
+        TujuanSuratKeluar::where('surat_keluar_id', $surat->id)->delete();
+
+        $surat->delete();
+
+        return redirect()->route('admin.surat_keluar')->with('success', 'Surat masuk berhasil dihapus.');
     }
 }

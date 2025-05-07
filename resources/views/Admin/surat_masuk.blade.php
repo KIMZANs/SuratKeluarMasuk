@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -24,8 +22,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">Home</a>
@@ -171,8 +168,7 @@
                                     <input type="text" class="form-control" placeholder="Search">
                                 </div>
                                 <div class="col-auto">
-                                    <a href="{{ route('admin.surat_masuk.tambah') }}"
-                                        class="btn btn-primary">Tambah</a>
+                                    <a href="{{ route('admin.surat_masuk.tambah') }}" class="btn btn-primary">Tambah</a>
                                 </div>
                             </div>
                             <div class="card shadow-none">
@@ -201,13 +197,11 @@
                                                     <td>
                                                         @if ($surat->tembusans->count() > 0)
                                                             @foreach ($surat->tembusans as $index => $tembusan)
-                                                                {{ $tembusan->jabatan->nama_jabatan }}
-                                                                @if ($index < $surat->tembusans->count() - 1)
-                                                                    ,
-                                                                @endif
+                                                                <span
+                                                                    class="badge badge-info">{{ $tembusan->jabatan->nama_jabatan }}</span>
                                                             @endforeach
                                                         @else
-                                                            <span class="text-muted">-</span>
+                                                            <span class="badge badge-secondary">Tidak ada</span>
                                                         @endif
                                                     </td>
                                                     <td>{{ $surat->tanggal }}</td>
@@ -221,7 +215,7 @@
                                                     </td>
                                                     <td>
                                                         <a href="{{ route('admin.surat_masuk.edit', $surat->id) }}"
-                                                            class="btn btn-sm btn-warning">Edit</a>
+                                                            class="btn btn-sm btn-success">Edit</a>
                                                         <button type="button" class="btn btn-danger btn-sm"
                                                             data-toggle="modal" data-target="#modalDeleteSurat"
                                                             data-surat-id="{{ $surat->id }}">Hapus</button>
@@ -264,8 +258,8 @@
     <!-- ./wrapper -->
 
     <!-- Modal Konfirmasi Hapus -->
-    <div class="modal fade" id="modalDeleteSurat" tabindex="-1" role="dialog"
-        aria-labelledby="modalDeleteSuratLabel" aria-hidden="true">
+    <div class="modal fade" id="modalDeleteSurat" tabindex="-1" role="dialog" aria-labelledby="modalDeleteSuratLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content shadow-none">
                 <div class="modal-header">
@@ -296,13 +290,11 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Summernote -->
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
     <!-- Initialize -->
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Event listener untuk Modal Hapus saat ditampilkan
-            $('#modalDeleteSurat').on('show.bs.modal', function(event) {
+            $('#modalDeleteSurat').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget); // Tombol yang memicu modal
                 var suratId = button.data('surat-id'); // Mengambil ID surat dari atribut data
 
