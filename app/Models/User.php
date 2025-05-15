@@ -53,4 +53,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function unitKerja()
+    {
+        return $this->belongsTo(UnitKerja::class);
+    }
 }

@@ -521,30 +521,28 @@
         </div>
 
         <!-- Modal Flash Message -->
-<div class="modal fade" id="flashMessageModal" tabindex="-1" role="dialog" aria-labelledby="flashMessageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content shadow-none">
-            <div class="modal-header">
-                <h5 class="modal-title" id="flashMessageModalLabel">Informasi</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="flashMessageContent"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+        <div class="modal fade" id="flashMessageModal" tabindex="-1" role="dialog"
+            aria-labelledby="flashMessageModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content shadow-none">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="flashMessageModalLabel">Informasi</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="flashMessageContent"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
-            </div>
-            <strong>Copyright &copy; 2024 Institut Pemerintahan Dalam Negri</strong>
+            <strong>Copyright &copy; 2024 Institut Pemerintahan Dalam Negeri</strong>
         </footer>
 
         <!-- Control Sidebar -->

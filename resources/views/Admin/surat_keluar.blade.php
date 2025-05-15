@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Masuk</title>
+    <title>Surat Keluar</title>
     <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <!-- Bootstrap 4 -->
+    <!-- Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 
@@ -168,7 +168,8 @@
                                     <input type="text" class="form-control" placeholder="Search">
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-primary">Tambah</button>
+                                    <a href="{{ route('admin.surat_keluar.tambah') }}"
+                                        class="btn btn-primary">Tambah</a>
                                 </div>
                             </div>
                             <div class="card shadow-none">
@@ -177,32 +178,60 @@
                                     <table class="table table-head-fixed text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th style="width: 10px">No</th>
+                                                <th>No</th>
                                                 <th>Nomor Surat</th>
                                                 <th>Pengirim</th>
                                                 <th>Tujuan</th>
                                                 <th>Tembusan</th>
-                                                <th>Tanggal Masuk</th>
+                                                <th>Tanggal</th>
                                                 <th>Sifat</th>
                                                 <th>Perihal</th>
-                                                <th>Reviewer</th>
-                                                <th>Penandatangan</th>
-                                                <th>Aksi</th>
+                                                <th style="width: 10px">Detail</th>
+                                                <th style="width: 10px">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($suratKeluar as $index => $surat)
+                                            @foreach ($suratkeluar as $index => $surat)
                                                 <tr>
                                                     <td>{{ $index + 1 }}</td>
                                                     <td>{{ $surat->nomor_surat }}</td>
                                                     <td>{{ $surat->pengirim }}</td>
-                                                    <td>{{ $surat->tujuan }}</td>
-                                                    <td>{{ $surat->tembusan }}</td>
-                                                    <td>{{ $surat->tanggal_masuk }}</td>
+                                                    <td>
+                                                        @if($surat->tujuans->count() > 0)
+                                                            @foreach($surat->tujuans as $tujuan)
+                                                                <span
+                                                                    class="badge badge-info">{{ $tujuan->jabatan->nama_jabatan }}</span>
+                                                            @endforeach
+                                                        @else
+                                                            <span class="badge badge-secondary">Tidak ada</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($surat->tembusans->count() > 0)
+                                                            @foreach ($surat->tembusans as $tembusan)
+                                                                <span
+                                                                    class="badge badge-info">{{ $tembusan->jabatan->nama_jabatan }}</span>
+                                                            @endforeach
+                                                        @else
+                                                            <span class="badge badge-secondary">Tidak ada</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $surat->tanggal }}</td>
                                                     <td>{{ $surat->sifat }}</td>
-                                                    <td>{{ $surat->perihal }}</td>
-                                                    <td>{{ $surat->reviewer }}</td>
-                                                    <td>{{ $surat->penandatangan }}</td>
+                                                    <td>{!! $surat->perihal !!}</td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-sm"
+                                                            onclick="window.open('{{ route('admin.surat_keluar.view', $surat->id) }}', '_blank')">
+                                                            <i class="fas fa-eye"></i> Lihat Detail
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('admin.surat_keluar.edit', $surat->id) }}"
+                                                            class="btn btn-sm btn-success">Edit</a>
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            data-toggle="modal" data-target="#modalDeleteSurat"
+                                                            data-surat-id="{{ $surat->id }}">Hapus</button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -211,11 +240,7 @@
                                 <!-- /.card-body -->
                                 <div class="card-footer clearfix">
                                     <ul class="pagination pagination-sm m-0 float-right">
-                                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                        {{ $suratkeluar->links('pagination::bootstrap-4') }}
                                     </ul>
                                 </div>
                             </div>
@@ -230,10 +255,7 @@
         <!-- /.content-wrapper -->
 
         <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
-            </div>
-            <strong>Copyright &copy; 2024 Institut Pemerintahan Dalam Negri</strong>
+            <strong>Copyright &copy; 2024 Institut Pemerintahan Dalam Negeri</strong>
         </footer>
 
         <!-- Control Sidebar -->
@@ -244,12 +266,56 @@
     </div>
     <!-- ./wrapper -->
 
+    <!-- Modal Konfirmasi Hapus -->
+    <div class="modal fade" id="modalDeleteSurat" tabindex="-1" role="dialog" aria-labelledby="modalDeleteSuratLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content shadow-none">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDeleteSuratLabel">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus surat ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteSuratForm" action="" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Initialize -->
+    <script>
+        $(document).ready(function () {
+            // Event listener untuk Modal Hapus saat ditampilkan
+            $('#modalDeleteSurat').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Tombol yang memicu modal
+                var suratId = button.data('surat-id'); // Mengambil ID surat dari atribut data
+
+                var modal = $(this);
+                var formAction = "{{ route('admin.surat_keluar.destroy', '') }}/" +
+                    suratId; // Menentukan URL penghapusan berdasarkan ID surat
+
+                modal.find('#deleteSuratForm').attr('action',
+                    formAction); // Atur action form untuk penghapusan surat
+            });
+        });
+    </script>
 </body>
 
 </html>
