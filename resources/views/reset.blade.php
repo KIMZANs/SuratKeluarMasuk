@@ -33,7 +33,7 @@
                                 @enderror
                             </div>
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Send Password Reset Link</button>
+                                <button type="submit" class="btn btn-primary">Kirim Link Reset Password</button>
                             </div>
                         </form>
                     </div>

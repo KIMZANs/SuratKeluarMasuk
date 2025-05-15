@@ -30,11 +30,13 @@ class AdminDashboardController extends Controller
     {
         $search = $request->input('search'); // Ambil input pencarian
 
-        $users = User::where('role', '!=', 'admin') // Filter agar admin tidak muncul
+        $users = User::where('role', '!=', 'admin')
             ->when($search, function ($query, $search) {
-                return $query->where('nama', 'like', "%{$search}%")
-                    ->orWhere('nip', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', "%$search%")
+                        ->orWhere('nip', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%");
+                });
             })
             ->paginate(10); // Gunakan paginate() untuk mendukung pagination
 
@@ -42,7 +44,11 @@ class AdminDashboardController extends Controller
         $golongan_jabatans = GolonganJabatan::all();
         $unit_kerjas = UnitKerja::all();
 
-        return view('Admin.pegawai', compact('users', 'jabatans', 'golongan_jabatans', 'unit_kerjas'));
+        if ($request->ajax()) {
+            return view('Admin.pegawai', compact('users', 'jabatans', 'golongan_jabatans', 'unit_kerjas'))->render();
+        }
+    
+        return view('Admin.pegawai', compact('users', 'jabatans', 'golongan_jabatans', 'unit_kerjas'));    
     }
 
     public function toggleStatus($id)
@@ -142,7 +148,8 @@ class AdminDashboardController extends Controller
         $search = $request->input('search');
 
         $jabatans = Jabatan::when($search, function ($query, $search) {
-            return $query->where('nama_jabatan', 'like', "%{$search}%");
+            return $query->where('nama_jabatan', 'like', "%{$search}%")
+                         ->orWhere('keterangan', 'like', "%{$search}%");
         })->paginate(10);
 
         return view('Admin.jabatan', compact('jabatans'));

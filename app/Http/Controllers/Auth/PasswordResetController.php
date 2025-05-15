@@ -26,7 +26,7 @@ class PasswordResetController extends Controller
         $user = \App\Models\User::where('email', $request->email)->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak ditemukan.']);
+            return back()->withErrors(['email' => 'Email tidak ditemukan atau tidak terdaftar.']);
         }
 
         // Buat token reset password

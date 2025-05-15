@@ -170,8 +170,8 @@
                             <div class="row mb-3">
                                 <div class="col">
                                     <form method="GET" action="{{ route('admin.pegawai') }}">
-                                        <input type="text" name="search" class="form-control" placeholder="Search"
-                                            value="{{ request('search') }}">
+                                        <input type="text" id="search" name="search" class="form-control"
+                                            placeholder="Cari Pegawai..." autocomplete="off">
                                     </form>
                                 </div>
                                 <div class="col-auto">
@@ -661,6 +661,27 @@
                 $('#flashMessageContent').text("{{ session('error') }}");
                 $('#flashMessageModal').modal('show');
             @endif
+
+            $('#search').on('keyup', function () {
+                var query = $(this).val();
+
+                // Kirim permintaan AJAX ke server
+                $.ajax({
+                    url: "{{ route('admin.pegawai') }}", // Gunakan route yang sama
+                    type: "GET",
+                    data: { search: query },
+                    success: function (data) {
+                        // Ganti isi tabel dengan hasil pencarian
+                        $('tbody').html($(data).find('tbody').html());
+
+                        // Ganti pagination jika ada
+                        $('.pagination').html($(data).find('.pagination').html());
+                    },
+                    error: function () {
+                        $('tbody').html('<tr><td colspan="12" class="text-center text-danger">Terjadi kesalahan saat memuat data.</td></tr>');
+                    }
+                });
+            });
         });
     </script>
 </body>

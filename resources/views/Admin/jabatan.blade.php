@@ -218,7 +218,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="4" class="text-center">Tidak ada data jabatan.</td>
+                                                    <td colspan="4" class="text-center">Tidak ada data jabatan yang ditemukan.</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -294,14 +294,12 @@
                             <div class="form-group">
                                 <label for="nama_jabatan">Nama Jabatan</label>
                                 <input type="text" class="form-control" id="edit_nama_jabatan" name="nama_jabatan"
-                                    value="{{ old('nama_jabatan', $jabatan->nama_jabatan) }}" required
-                                    placeholder="Masukan nama jabatan">
+                                    value="" required placeholder="Masukan nama jabatan">
                             </div>
                             <div class="form-group">
                                 <label for="keterangan">Keterangan</label>
                                 <input type="text" class="form-control" id="edit_keterangan" name="keterangan"
-                                    value="{{ old('keterangan', $jabatan->keterangan) }}"
-                                    placeholder="Masukan keterangan">
+                                    value="" placeholder="Masukan keterangan">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -318,7 +316,7 @@
         <div class="modal fade" id="modalHapusJabatan" tabindex="-1" role="dialog"
             aria-labelledby="modalHapusJabatanLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{{ route('admin.jabatan.destroy', $jabatan->id) }}" method="POST">
+                <form action="{{ route('admin.jabatan.destroy', $jabatan->id ?? '') }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="modal-content shadow-none">

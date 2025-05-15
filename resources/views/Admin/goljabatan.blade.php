@@ -314,7 +314,7 @@
         <div class="modal fade" id="modalHapusJabatangol" tabindex="-1" role="dialog"
             aria-labelledby="modalHapusJabatangolLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                <form action="{{ route('admin.goljabatan.destroy', $golongan_jabatan->id) }}" method="POST">
+                <form action="{{ route('admin.goljabatan.destroy', $golongan_jabatan->id ?? '') }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="modal-content shadow-none">
